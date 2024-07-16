@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: vagos-software-api
+    env_file: ".env"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/usr/src/app/src
+      - ./package.json:/usr/src/app/package.json
+    command: sh -c "npm install && npx ts-node-dev src/index.ts"
