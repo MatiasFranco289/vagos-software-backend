@@ -1,7 +1,7 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 
-interface MockedRoles {
+interface MockedRole {
   id: number;
   rolename: "USER" | "ADMIN";
 }
@@ -9,7 +9,7 @@ interface MockedRoles {
 interface MockedUser {
   id: number;
   username: string;
-  roles: Array<MockedRoles>;
+  role: MockedRole;
 }
 
 const token =
@@ -27,12 +27,10 @@ export const AuthController = {
         {
           id: 1,
           username: "VagoDev1",
-          roles: [
-            {
-              id: 1,
-              rolename: "ADMIN",
-            },
-          ],
+          role: {
+            id: 1,
+            rolename: "ADMIN",
+          },
         },
       ],
     };
@@ -42,6 +40,31 @@ export const AuthController = {
       sameSite: "strict",
       maxAge: COOKIE_MAX_AGE,
     });
+
+    res.status(statusCode).json(response);
+  },
+  loginFailed: async (req: Request, res: Response<ApiResponse<null>>) => {
+    const statusCode: number = 403;
+
+    const response: ApiResponse<null> = {
+      statusCode: statusCode,
+      message: "Incorrect credentials",
+      data: [],
+    };
+
+    res.status(statusCode).json(response);
+  },
+  // This endpoint will not be really related to login because for login endpoint authentication token
+  // is not needed. Instead this endpoint emulates the middleware behavior which will allow us to access
+  // another endpoints or reject us if our token is invalid
+  loginInvalidToken: async (req: Request, res: Response<ApiResponse<null>>) => {
+    const statusCode: number = 403;
+
+    const response: ApiResponse<null> = {
+      statusCode: statusCode,
+      message: "Invalid token",
+      data: [],
+    };
 
     res.status(statusCode).json(response);
   },
