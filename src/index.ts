@@ -10,6 +10,7 @@ const apiRouter = express.Router();
 const port = process.env.API_PORT;
 const corsOptions = {
   origin: process.env.FRONTEND_BASE_URL,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
