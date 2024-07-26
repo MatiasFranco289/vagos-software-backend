@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
+import syncDatabase from "./config/sync";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use("/api", apiRouter);
 
 apiRouter.use("/auth", authRouter);
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
+syncDatabase().then(() => {
+  app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
+  });
 });
