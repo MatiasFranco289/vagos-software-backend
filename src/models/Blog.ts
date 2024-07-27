@@ -2,14 +2,13 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/databaseConnection";
 import User from "./User";
 import Project from "./Project";
-import BlogTag from "./BlogTag";
 
 class Blog extends Model {
   declare id: number;
   declare projectId: number;
   declare creatorId: number;
   title: string;
-  content: string
+  content: Text;
 }
 
 Blog.init(
@@ -21,6 +20,7 @@ Blog.init(
     },
     projectId: {
         type: DataTypes.INTEGER,
+        field: 'project_id',
         references: {
             model: Project,
             key: 'id'
@@ -28,6 +28,7 @@ Blog.init(
     },
     creatorId: {
         type: DataTypes.INTEGER,
+        field: 'creator_id',
         references: {
             model: User,
             key: 'id'
@@ -38,7 +39,7 @@ Blog.init(
         allowNull: false,
     },
     content: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
   },
@@ -47,14 +48,5 @@ Blog.init(
     tableName: "blogs",
   }
 );
-
-User.hasMany(Blog);
-Blog.belongsTo(User);
-
-Project.hasMany(Blog);
-Blog.belongsTo(Project);
-
-Blog.belongsToMany(BlogTag, { through: 'BlogHasTag' });
-BlogTag.belongsToMany(Blog, { through: 'BlogHasTag' });
 
 export default Blog;

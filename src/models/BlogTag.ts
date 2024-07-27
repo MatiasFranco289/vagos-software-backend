@@ -20,7 +20,7 @@ BlogTag.init(
   },
   {
     sequelize,
-    tableName: "blogTags",
+    tableName: "blog_tags",
   }
 );
 

@@ -7,6 +7,7 @@ class Comment extends Model {
   declare id: number;
   declare userId: number;
   declare blogId: number;
+  declare parentId: number;
   content: string;
 }
 
@@ -19,17 +20,27 @@ Comment.init(
     },
     userId: {
       type: DataTypes.INTEGER,
+      field: 'user_id',
       references: {
         model: User,
         key: 'id'
       }
     },
     blogId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Blog,
-            key: 'id'
-        }
+      type: DataTypes.INTEGER,
+      field: 'blog_id',
+      references: {
+          model: Blog,
+          key: 'id'
+      }
+    },
+    parentId: {
+      type: DataTypes.INTEGER,
+      field: 'parent_id',
+      references: {
+        model: Comment,
+        key: 'id'
+      }
     },
     content: {
       type: DataTypes.STRING,
@@ -41,11 +52,5 @@ Comment.init(
     tableName: "comments",
   }
 );
-
-Blog.hasMany(Comment);
-Comment.belongsTo(Blog);
-
-User.hasMany(Comment);
-Comment.belongsTo(User);
 
 export default Comment;

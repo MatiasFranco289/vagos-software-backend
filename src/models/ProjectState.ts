@@ -20,7 +20,7 @@ ProjectState.init(
   },
   {
     sequelize,
-    tableName: "projectStates",
+    tableName: "project_states",
   }
 );
 

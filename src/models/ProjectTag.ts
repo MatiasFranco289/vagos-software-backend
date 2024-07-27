@@ -20,7 +20,7 @@ ProjectTag.init(
   },
   {
     sequelize,
-    tableName: "projectTags",
+    tableName: "project_tags",
   }
 );
 

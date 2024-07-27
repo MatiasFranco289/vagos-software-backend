@@ -10,6 +10,7 @@ class User extends Model {
   username: string;
   email: string;
   password: string;
+  profilePicture: string;
 }
 
 User.init(
@@ -21,6 +22,7 @@ User.init(
     },
     roleId: {
       type: DataTypes.INTEGER,
+      field: 'role_id',
       references: {
         model: Role,
         key: 'id',
@@ -28,6 +30,7 @@ User.init(
     },
     stateId: {
       type: DataTypes.INTEGER,
+      field: 'state_id',
       references: {
         model: UserState,
         key: 'id',
@@ -47,17 +50,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    profilePicture: {
+      type: DataTypes.STRING,
+    }
   },
   {
     sequelize,
     tableName: "users",
   }
 );
-
-Role.hasMany(User);
-User.belongsTo(Role);
-
-UserState.hasMany(User);
-User.belongsTo(UserState);
 
 export default User;

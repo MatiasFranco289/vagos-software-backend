@@ -1,7 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/databaseConnection";
 import ProjectState from "./ProjectState";
-import ProjectTag from "./ProjectTag";
 import User from "./User";
 
 class Project extends Model {
@@ -9,7 +8,7 @@ class Project extends Model {
   declare stateId: number;
   declare creatorId: number;
   name: string;
-  content: string;
+  content: Text;
 }
 
 Project.init(
@@ -21,6 +20,7 @@ Project.init(
     },
     stateId: {
         type: DataTypes.INTEGER,
+        field: 'state_id',
         references: {
           model: ProjectState,
           key: 'id'
@@ -28,6 +28,7 @@ Project.init(
     },
     creatorId: {
         type: DataTypes.INTEGER,
+        field: 'creator_id',
         references: {
           model: User,
           key: 'id'
@@ -39,7 +40,7 @@ Project.init(
       unique: true
     },
     content: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     }
   },
@@ -48,22 +49,5 @@ Project.init(
     tableName: "projects",
   }
 );
-
-User.hasMany(Project, {
-  foreignKey: 'creatorId',
-});
-Project.belongsTo(User, {
-  foreignKey: 'creatorId',
-});
-
-ProjectState.hasMany(Project, {
-  foreignKey: 'stateId',
-});
-Project.belongsTo(ProjectState, {
-  foreignKey: 'stateId',
-});
-
-Project.belongsToMany(ProjectTag, { through: 'ProjectHasTag' });
-ProjectTag.belongsToMany(Project, { through: 'ProjectHasTag' });
 
 export default Project;

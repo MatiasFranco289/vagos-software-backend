@@ -21,7 +21,7 @@ UserState.init(
   },
   {
     sequelize,
-    tableName: "userStates",
+    tableName: "user_states",
   }
 );
 
