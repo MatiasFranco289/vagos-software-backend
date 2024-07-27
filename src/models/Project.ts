@@ -22,15 +22,15 @@ Project.init(
     stateId: {
         type: DataTypes.INTEGER,
         references: {
-            model: ProjectState,
-            key: 'id'
+          model: ProjectState,
+          key: 'id'
         }
     },
     creatorId: {
         type: DataTypes.INTEGER,
         references: {
-            model: User,
-            key: 'id'
+          model: User,
+          key: 'id'
         }
     },
     name: {
@@ -49,11 +49,19 @@ Project.init(
   }
 );
 
-User.hasMany(Project);
-Project.belongsTo(User);
+User.hasMany(Project, {
+  foreignKey: 'creatorId',
+});
+Project.belongsTo(User, {
+  foreignKey: 'creatorId',
+});
 
-ProjectState.hasMany(Project);
-Project.belongsTo(ProjectState);
+ProjectState.hasMany(Project, {
+  foreignKey: 'stateId',
+});
+Project.belongsTo(ProjectState, {
+  foreignKey: 'stateId',
+});
 
 Project.belongsToMany(ProjectTag, { through: 'ProjectHasTag' });
 ProjectTag.belongsToMany(Project, { through: 'ProjectHasTag' });

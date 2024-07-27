@@ -55,7 +55,7 @@ User.init(
 );
 
 Role.hasMany(User);
-User.belogsTo(Role);
+User.belongsTo(Role);
 
 UserState.hasMany(User);
 User.belongsTo(UserState);
