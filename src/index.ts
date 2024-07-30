@@ -1,8 +1,11 @@
 import express from "express";
+import { query, validationResult } from "express-validator";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
+import roleRouter from "./routes/role";
 import syncDatabase from "./config/sync";
+
 
 dotenv.config();
 
@@ -14,11 +17,14 @@ const corsOptions = {
   credentials: true,
 };
 
+app.use(express.json());
+
 app.use(cors(corsOptions));
 
 app.use("/api", apiRouter);
 
 apiRouter.use("/auth", authRouter);
+apiRouter.use("/role", roleRouter);
 
 syncDatabase().then(() => {
   app.listen(port, () => {

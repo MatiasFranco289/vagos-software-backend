@@ -4,6 +4,7 @@ import sequelize from "../config/databaseConnection";
 class Role extends Model {
   declare id: number;
   name: string;
+  isActive: boolean
 }
 
 Role.init(
@@ -18,6 +19,10 @@ Role.init(
       allowNull: false,
       unique: true,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    }
   },
   {
     sequelize,
