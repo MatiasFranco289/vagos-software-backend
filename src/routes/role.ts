@@ -4,10 +4,10 @@ import { roleCreateValidation, roleDeleteValidation, roleGetValidation, roleUpda
 
 const roleRouter = Router();
 
-roleRouter.post("/create", roleCreateValidation, RoleController.createRole);
-roleRouter.post("/update", roleUpdateValidation, RoleController.updateRole);
-roleRouter.delete("/delete", roleDeleteValidation, RoleController.deleteRole);
-roleRouter.get("/get", roleGetValidation, RoleController.getRole);
+roleRouter.post("/", roleCreateValidation, RoleController.createRole);
+roleRouter.put("/:id", roleUpdateValidation, RoleController.updateRole);
+roleRouter.delete("/:id", roleDeleteValidation, RoleController.deleteRole);
+roleRouter.get("/:id", roleGetValidation, RoleController.getRole);
 roleRouter.get("/", RoleController.getAllRoles);
 
 export default roleRouter;

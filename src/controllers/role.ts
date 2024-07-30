@@ -2,6 +2,7 @@ import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import Role from "../models/Role";
 import { and, Op } from "sequelize";
+import { param } from 'express-validator';
 
 const statusCode = 201;
 const statusCodeConflict = 409;
@@ -19,32 +20,30 @@ export const RoleController = {
     };
 
     try {
-      //TODO: allow the creation of logically deleted roles
-
       let roles: string[];
 
-      if (Array.isArray(role_name)) roles = role_name;
-      else roles = [role_name];
+      if (Array.isArray(role_name)) 
+        roles = role_name;
+      else
+        roles = [role_name];
 
       //Look for any roles that may exists but are logically deleted in the table
       let rolesAlreadyInTable = await Role.findAll({
         where: {
-          name: {
-            [Op.or]: [roles],
-          },
+          name: roles,
           isActive: false,
         },
       });
 
-      let rolesAlreadyInTable2 = rolesAlreadyInTable.map((role) => {
+      const namesAlreadyInTable = rolesAlreadyInTable.map((role) => {
         return role.name;
       });
 
       //Insert only the roles that do not exist in the table
-      roles = roles.filter((role) => !rolesAlreadyInTable2.includes(role)); //TODO: AAAAAAAAAAAAAAAAAAA
+      roles = roles.filter((role) => !namesAlreadyInTable.includes(role));
 
       //Update active status for those roles that exist in the table
-      const updatedRoles = await Role.update(
+      await Role.update(
         { isActive: true },
         {
           where: {
@@ -56,11 +55,18 @@ export const RoleController = {
       newRole = await Role.bulkCreate(roles.map((name) => ({ name: name })));
 
       response.data = newRole;
+
     } catch (err) {
       console.log(err);
       if (err.errors[0].type === "unique violation") {
-        //TODO: specify which role name already exists
-        response.message = "The specified role name already exists";
+
+        //Iterate over the errors and show them in the response
+        let message : string = "";
+        err.errors.forEach(element => {
+            message += element.message + ": " + element.value;
+        });
+
+        response.message = message;
         response.statusCode = statusCodeConflict;
       }
     }
@@ -68,14 +74,8 @@ export const RoleController = {
     res.status(response.statusCode).json(response);
   },
   updateRole: async (req: Request, res: Response<ApiResponse<number>>) => {
-    let id = -1;
-    let old_role_name = "";
+    const { id } = req.params;
     const { new_role_name } = req.body;
-
-    if (req.body.hasOwnProperty("id")) id = req.body.id;
-
-    if (req.body.hasOwnProperty("old_role_name"))
-      old_role_name = req.body.old_role_name;
 
     const response: ApiResponse<number | null> = {
       statusCode: statusCode,
@@ -89,14 +89,8 @@ export const RoleController = {
         { name: new_role_name },
         {
           where: {
-            [Op.or]: [
-              {
                 id: id,
-              },
-              {
-                name: old_role_name,
-              },
-            ],
+                isActive: true
           },
         }
       );
@@ -115,12 +109,7 @@ export const RoleController = {
     res.status(response.statusCode).json(response);
   },
   deleteRole: async (req: Request, res: Response<ApiResponse<number>>) => {
-    let id = -1;
-    let role_name = "";
-
-    if (req.body.hasOwnProperty("id")) id = req.body.id;
-
-    if (req.body.hasOwnProperty("role_name")) role_name = req.body.role_name;
+    const {id} = req.params
 
     const response: ApiResponse<number | null> = {
       statusCode: statusCode,
@@ -128,18 +117,17 @@ export const RoleController = {
       data: [],
     };
 
+    let idToFind : Array<string> = [];
+    if (/.,/.test(id))
+        idToFind = id.split(',');
+    else 
+        idToFind = [id];
+
     const deletedRoles = await Role.update(
       { isActive: false },
       {
         where: {
-          [Op.or]: [
-            {
-              id: id,
-            },
-            {
-              name: role_name,
-            },
-          ],
+              id: idToFind,
           isActive: true,
         },
       }
@@ -152,12 +140,7 @@ export const RoleController = {
     res.status(response.statusCode).json(response);
   },
   getRole: async (req: Request, res: Response<ApiResponse<Role>>) => {
-    let id = -1;
-    let role_name = "";
-
-    if (req.body.hasOwnProperty("id")) id = req.body.id;
-
-    if (req.body.hasOwnProperty("role_name")) role_name = req.body.role_name;
+    const {id} = req.params;
 
     const response: ApiResponse<Role | null> = {
       statusCode: statusCode,
@@ -165,16 +148,15 @@ export const RoleController = {
       data: [],
     };
 
+    let idToFind : Array<string> = [];
+    if (/.,/.test(id))
+        idToFind = id.split(',');
+    else 
+        idToFind = [id];
+
     const roles = await Role.findAll({
       where: {
-        [Op.or]: [
-          {
-            id: id,
-          },
-          {
-            name: role_name,
-          },
-        ],
+            id: idToFind,
       },
     });
 
