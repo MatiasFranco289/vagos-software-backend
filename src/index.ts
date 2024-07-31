@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
 import roleRouter from "./routes/role";
-import syncDatabase from "./config/sync";
+import { startServer } from "./config/server";
+import { DEVELOPMENT_ENVIRONMENT, PRODUCTION_ENVIRONMENT } from "./constants";
 
 dotenv.config();
 
@@ -24,8 +25,13 @@ app.use("/api", apiRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/role", roleRouter);
 
-syncDatabase().then(() => {
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
-  });
-});
+// If the environment is dev or prod server is started here
+if (
+  [PRODUCTION_ENVIRONMENT, DEVELOPMENT_ENVIRONMENT].includes(
+    process.env.NODE_ENV
+  )
+) {
+  startServer();
+}
+
+export default app;
