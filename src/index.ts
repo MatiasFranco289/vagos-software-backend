@@ -4,6 +4,7 @@ import cors from "cors";
 import authRouter from "./routes/auth";
 import roleRouter from "./routes/role";
 import syncDatabase from "./config/sync";
+import projectTagRouter from "./routes/projectTag";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use("/api", apiRouter);
 
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/role", roleRouter);
+apiRouter.use("/project-tag", projectTagRouter);
 
 syncDatabase().then(() => {
   app.listen(port, () => {
