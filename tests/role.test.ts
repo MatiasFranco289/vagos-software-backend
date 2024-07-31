@@ -15,7 +15,7 @@ describe("GET /api/role", () => {
 
     expect(response.status).toBe(201);
 
-    expect(response.body.data[0].name).toMatch("ADIN");
+    expect(response.body.data[0].name).toMatch("ADMIN");
     expect(response.body.data[1].name).toMatch("USER");
   });
 });
