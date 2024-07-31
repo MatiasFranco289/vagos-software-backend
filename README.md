@@ -37,6 +37,12 @@ If you are using docker you can execute the following command to create a contai
 docker run --name vagos-software-test-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=vagos_test_db -p 5432:5432 -d postgres
 ```
 
+If you have this container already created you can start it by using:
+
+```bash
+docker start vagos-software-test-db
+```
+
 Finally to run all the tests use the command:
 
 ```bash
