@@ -1,14 +1,15 @@
 import syncDatabase from "./sync";
 import app from "../../src/index";
+import http from "http";
 
 export const startServer = async () => {
   const port = process.env.API_PORT;
 
   await syncDatabase();
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<http.Server>((resolve, reject) => {
     const server = app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}/`);
-      resolve();
+      resolve(server);
     });
     server.on("error", reject);
   });
