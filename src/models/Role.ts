@@ -1,39 +1,28 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/databaseConnection";
 
-class Users extends Model {
+class Role extends Model {
   declare id: number;
-  username: string;
-  email: string;
-  password: string;
+  name: string;
 }
 
-Users.init(
+Role.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
   },
   {
     sequelize,
-    tableName: "users",
+    tableName: "roles",
   }
 );
 
-export default Users;
+export default Role;
