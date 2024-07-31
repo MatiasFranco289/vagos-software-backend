@@ -17,6 +17,12 @@ const DB_PASSWORD =
     : process.env.POSTGRES_PASSWORD;
 const DB_HOST = ENVIRONMENT !== TESTING_ENVIRONMENT ? "db" : "localhost";
 
+console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+console.log(ENVIRONMENT);
+console.log(DB_USER);
+console.log(DB_PASSWORD);
+console.log(DB_HOST);
+
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   dialect: "postgres",
