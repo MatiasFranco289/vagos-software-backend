@@ -20,9 +20,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: vagos_test_db
+          POSTGRES_DB: vagos_test_db
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s
