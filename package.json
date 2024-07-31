@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "NODE_ENV=TEST jest",
+    "git-test": "jest",
     "dev": "docker-compose up",
     "build": "tsc"
   },
