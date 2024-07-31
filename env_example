@@ -3,3 +3,4 @@ FRONTEND_BASE_URL='http://frontend_app_url.com'
 POSTGRES_USER="postgres"
 POSTGRES_PASSWORD="postgres"
 POSTGRES_DB="your_db_name"
+NODE_ENV='DEV'
