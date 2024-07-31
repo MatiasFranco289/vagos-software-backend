@@ -20,9 +20,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: testdb
+          POSTGRES_USER: vagos_test_db
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s
@@ -42,4 +42,4 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm run git-test
+        run: npm test
