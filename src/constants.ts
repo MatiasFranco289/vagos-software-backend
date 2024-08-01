@@ -1,0 +1,5 @@
+export const DEVELOPMENT_ENVIRONMENT = "DEV";
+
+export const PRODUCTION_ENVIRONMENT = "PROD";
+
+export const TESTING_ENVIRONMENT = "TEST";
