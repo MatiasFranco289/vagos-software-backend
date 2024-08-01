@@ -5,6 +5,7 @@ import authRouter from "./routes/auth";
 import roleRouter from "./routes/role";
 import { startServer } from "./config/server";
 import { DEVELOPMENT_ENVIRONMENT, PRODUCTION_ENVIRONMENT } from "./constants";
+import projectTagRouter from "./routes/projectTag";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api", apiRouter);
 
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/role", roleRouter);
+apiRouter.use("/project-tag", projectTagRouter);
 
 // If the environment is dev or prod server is started here
 if (
