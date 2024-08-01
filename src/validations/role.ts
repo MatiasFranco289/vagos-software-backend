@@ -1,5 +1,6 @@
 import { body, param } from "express-validator";
 import { validateResult } from "../middlewares/validateMiddleware";
+import { isCsvNumbers } from "../utils";
 
 export const roleCreateValidation = [
   body("role_name")
@@ -46,8 +47,7 @@ export const roleDeleteValidation = [
     .withMessage("id must be provided")
     .custom((value) => {
       // Check if the value is a comma-separated list of numbers
-      const regex = /^(\d+)(,\d+)*$/;
-      if (!regex.test(value)) {
+      if (!isCsvNumbers(value)) {
         throw new Error("id must be a comma-separated list of numbers");
       }
       return true;

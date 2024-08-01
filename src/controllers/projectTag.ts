@@ -1,9 +1,8 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import ProjectTag from "../models/ProjectTag";
-
-const statusCodeOk = 201;
-const statusCodeConflict = 409;
+import { getArrayFromCSV } from "../utils";
+import { statusCode } from "../constants";
 
 export const ProjectTagController = {
   createProjectTag: async (
@@ -13,7 +12,7 @@ export const ProjectTagController = {
     const { project_tag_name } = req.body;
 
     const response: ApiResponse<ProjectTag | null> = {
-      statusCode: statusCodeOk,
+      statusCode: statusCode.created,
       message: "Project Tags Successfully Created",
       data: [],
     };
@@ -35,7 +34,7 @@ export const ProjectTagController = {
       });
 
       response.message = message;
-      response.statusCode = statusCodeConflict;
+      response.statusCode = statusCode.conflict;
     }
 
     res.status(response.statusCode).json(response);
@@ -48,7 +47,7 @@ export const ProjectTagController = {
     const { new_project_tag_name } = req.body;
 
     const response: ApiResponse<number | null> = {
-      statusCode: statusCodeOk,
+      statusCode: statusCode.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -70,7 +69,7 @@ export const ProjectTagController = {
       response.data = [updatedProjectTags[0]];
     } catch (err) {
       console.log(err);
-      response.statusCode = statusCodeConflict;
+      response.statusCode = statusCode.conflict;
       response.message =
         "The specified role name already exists, the new role name must be unique";
     }
@@ -84,14 +83,12 @@ export const ProjectTagController = {
     const { id } = req.params;
 
     const response: ApiResponse<number | null> = {
-      statusCode: statusCodeOk,
+      statusCode: statusCode.ok,
       message: "Successfully Deleted ",
       data: [],
     };
 
-    let idToFind: Array<string> = [];
-    if (/.,/.test(id)) idToFind = id.split(",");
-    else idToFind = [id];
+    let idToFind: Array<string> = getArrayFromCSV(id);
 
     const deletedRoles = await ProjectTag.destroy({
       where: {
@@ -112,14 +109,12 @@ export const ProjectTagController = {
     const { id } = req.params;
 
     const response: ApiResponse<ProjectTag | null> = {
-      statusCode: statusCodeOk,
+      statusCode: statusCode.ok,
       message: "Successfully Retrieved Roles",
       data: [],
     };
 
-    let idToFind: Array<string> = [];
-    if (/.,/.test(id)) idToFind = id.split(",");
-    else idToFind = [id];
+    let idToFind: Array<string> = getArrayFromCSV(id);
 
     const roles = await ProjectTag.findAll({
       where: {
@@ -136,7 +131,7 @@ export const ProjectTagController = {
     res: Response<ApiResponse<ProjectTag>>
   ) => {
     const response: ApiResponse<ProjectTag> = {
-      statusCode: statusCodeOk,
+      statusCode: statusCode.ok,
       message: "Successfully Retrieved All Project Tags",
       data: [],
     };

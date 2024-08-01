@@ -1,11 +1,8 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import Role from "../models/Role";
-import { and, Op } from "sequelize";
-import { param } from 'express-validator';
-
-const statusCode = 201;
-const statusCodeConflict = 409;
+import { getArrayFromCSV } from "../utils";
+import { statusCode } from "../constants";
 
 export const RoleController = {
   createRole: async (req: Request, res: Response<ApiResponse<Role | null>>) => {
@@ -14,7 +11,7 @@ export const RoleController = {
     let newRole: Role[] | null = null;
 
     const response: ApiResponse<Role> = {
-      statusCode: statusCode,
+      statusCode: statusCode.created,
       message: "Role Successfully Created",
       data: [],
     };
@@ -22,10 +19,8 @@ export const RoleController = {
     try {
       let roles: string[];
 
-      if (Array.isArray(role_name)) 
-        roles = role_name;
-      else
-        roles = [role_name];
+      if (Array.isArray(role_name)) roles = role_name;
+      else roles = [role_name];
 
       //Look for any roles that may exists but are logically deleted in the table
       let rolesAlreadyInTable = await Role.findAll({
@@ -55,19 +50,17 @@ export const RoleController = {
       newRole = await Role.bulkCreate(roles.map((name) => ({ name: name })));
 
       response.data = newRole;
-
     } catch (err) {
       console.log(err);
       if (err.errors[0].type === "unique violation") {
-
         //Iterate over the errors and show them in the response
-        let message : string = "";
-        err.errors.forEach(element => {
-            message += element.message + ": " + element.value;
+        let message: string = "";
+        err.errors.forEach((element) => {
+          message += element.message + ": " + element.value;
         });
 
         response.message = message;
-        response.statusCode = statusCodeConflict;
+        response.statusCode = statusCode.conflict;
       }
     }
 
@@ -78,7 +71,7 @@ export const RoleController = {
     const { new_role_name } = req.body;
 
     const response: ApiResponse<number | null> = {
-      statusCode: statusCode,
+      statusCode: statusCode.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -89,8 +82,8 @@ export const RoleController = {
         { name: new_role_name },
         {
           where: {
-                id: id,
-                isActive: true
+            id: id,
+            isActive: true,
           },
         }
       );
@@ -100,7 +93,7 @@ export const RoleController = {
     } catch (err) {
       console.log(err);
       if (err.errors[0].type === "unique violation") {
-        response.statusCode = statusCodeConflict;
+        response.statusCode = statusCode.conflict;
         response.message =
           "The specified role name already exists, the new role name must be unique";
       }
@@ -109,25 +102,21 @@ export const RoleController = {
     res.status(response.statusCode).json(response);
   },
   deleteRole: async (req: Request, res: Response<ApiResponse<number>>) => {
-    const {id} = req.params
+    const { id } = req.params;
 
     const response: ApiResponse<number | null> = {
-      statusCode: statusCode,
+      statusCode: statusCode.ok,
       message: "Successfully Deleted ",
       data: [],
     };
 
-    let idToFind : Array<string> = [];
-    if (/.,/.test(id))
-        idToFind = id.split(',');
-    else 
-        idToFind = [id];
+    let idToFind: Array<string> = getArrayFromCSV(id);
 
     const deletedRoles = await Role.update(
       { isActive: false },
       {
         where: {
-              id: idToFind,
+          id: idToFind,
           isActive: true,
         },
       }
@@ -140,23 +129,19 @@ export const RoleController = {
     res.status(response.statusCode).json(response);
   },
   getRole: async (req: Request, res: Response<ApiResponse<Role>>) => {
-    const {id} = req.params;
+    const { id } = req.params;
 
     const response: ApiResponse<Role | null> = {
-      statusCode: statusCode,
+      statusCode: statusCode.ok,
       message: "Successfully Retrieved Roles",
       data: [],
     };
 
-    let idToFind : Array<string> = [];
-    if (/.,/.test(id))
-        idToFind = id.split(',');
-    else 
-        idToFind = [id];
+    let idToFind: Array<string> = getArrayFromCSV(id);
 
     const roles = await Role.findAll({
       where: {
-            id: idToFind,
+        id: idToFind,
       },
     });
 
@@ -166,7 +151,7 @@ export const RoleController = {
   },
   getAllRoles: async (req: Request, res: Response<ApiResponse<Role>>) => {
     const response: ApiResponse<Role | null> = {
-      statusCode: statusCode,
+      statusCode: statusCode.ok,
       message: "Successfully Retrieved All Roles",
       data: [],
     };

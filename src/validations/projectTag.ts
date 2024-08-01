@@ -1,11 +1,13 @@
 import { body, param } from "express-validator";
 import { validateResult } from "../middlewares/validateMiddleware";
+import { isCsvNumbers } from "../utils";
 
 export const projectTagCreateValidation = [
   body("project_tag_name")
     .exists()
     .withMessage("project_tag_name must be provided")
     .custom((value) => {
+      //TODO: Change this into a function
       if (typeof value === "string" && value.trim() !== "") {
         return true;
       }
@@ -46,8 +48,7 @@ export const projectTagDeleteValidation = [
     .withMessage("id must be provided")
     .custom((value) => {
       // Check if the value is a comma-separated list of numbers
-      const regex = /^(\d+)(,\d+)*$/;
-      if (!regex.test(value)) {
+      if (!isCsvNumbers(value)) {
         throw new Error("id must be a comma-separated list of numbers");
       }
       return true;
