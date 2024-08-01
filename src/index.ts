@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
 import roleRouter from "./routes/role";
-import projectTagRouter from "./routes/projectTag";
 import { startServer } from "./config/server";
 import { DEVELOPMENT_ENVIRONMENT, PRODUCTION_ENVIRONMENT } from "./constants";
+import projectTagRouter from "./routes/projectTag";
 
 dotenv.config();
 
