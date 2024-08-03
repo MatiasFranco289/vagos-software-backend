@@ -10,8 +10,19 @@ import ProjectState from "../models/ProjectState";
 import Blog from "../models/Blog";
 import BlogTag from "../models/BlogTag";
 import Comment from "../models/Comment";
+import createAssociations from "../models/associations";
 
-const models = [User, UserState, Role, Project, ProjectTag, ProjectState, Blog, BlogTag, Comment];
+const models = [
+  User,
+  UserState,
+  Role,
+  Project,
+  ProjectTag,
+  ProjectState,
+  Blog,
+  BlogTag,
+  Comment,
+];
 
 const syncDatabase = async () => {
   try {
@@ -23,7 +34,8 @@ const syncDatabase = async () => {
     });
 
     // If this parameter is TRUE all tables will be destroyed and recreated during initialization
-    await sequelize.sync({ force: true });
+    await createAssociations();
+    await sequelize.sync({ force: false });
     console.log("All models were synchronized successfully.");
   } catch (err) {
     console.error(
