@@ -4,7 +4,7 @@ export const PRODUCTION_ENVIRONMENT = "PROD";
 
 export const TESTING_ENVIRONMENT = "TEST";
 
-export const statusCode = {
+export const STATUS_CODE = {
   ok: 200,
   created: 201,
   Accepted: 202,

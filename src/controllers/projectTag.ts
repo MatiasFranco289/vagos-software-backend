@@ -2,7 +2,7 @@ import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import ProjectTag from "../models/ProjectTag";
 import { getArrayFromCSV } from "../utils";
-import { statusCode } from "../constants";
+import { STATUS_CODE } from "../constants";
 
 export const ProjectTagController = {
   createProjectTag: async (
@@ -12,7 +12,7 @@ export const ProjectTagController = {
     const { project_tag_name } = req.body;
 
     const response: ApiResponse<ProjectTag | null> = {
-      statusCode: statusCode.created,
+      statusCode: STATUS_CODE.created,
       message: "Project Tags Successfully Created",
       data: [],
     };
@@ -34,7 +34,7 @@ export const ProjectTagController = {
       });
 
       response.message = message;
-      response.statusCode = statusCode.conflict;
+      response.statusCode = STATUS_CODE.conflict;
     }
 
     res.status(response.statusCode).json(response);
@@ -47,7 +47,7 @@ export const ProjectTagController = {
     const { new_project_tag_name } = req.body;
 
     const response: ApiResponse<number | null> = {
-      statusCode: statusCode.created,
+      statusCode: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -69,7 +69,7 @@ export const ProjectTagController = {
       response.data = [updatedProjectTags[0]];
     } catch (err) {
       console.log(err);
-      response.statusCode = statusCode.conflict;
+      response.statusCode = STATUS_CODE.conflict;
       response.message =
         "The specified role name already exists, the new role name must be unique";
     }
@@ -83,7 +83,7 @@ export const ProjectTagController = {
     const { id } = req.params;
 
     const response: ApiResponse<number | null> = {
-      statusCode: statusCode.ok,
+      statusCode: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
@@ -109,7 +109,7 @@ export const ProjectTagController = {
     const { id } = req.params;
 
     const response: ApiResponse<ProjectTag | null> = {
-      statusCode: statusCode.ok,
+      statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved Roles",
       data: [],
     };
@@ -131,7 +131,7 @@ export const ProjectTagController = {
     res: Response<ApiResponse<ProjectTag>>
   ) => {
     const response: ApiResponse<ProjectTag> = {
-      statusCode: statusCode.ok,
+      statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved All Project Tags",
       data: [],
     };
