@@ -11,7 +11,17 @@ import Blog from "../models/Blog";
 import BlogTag from "../models/BlogTag";
 import Comment from "../models/Comment";
 
-const models = [User, UserState, Role, Project, ProjectTag, ProjectState, Blog, BlogTag, Comment];
+const models = [
+  User,
+  UserState,
+  Role,
+  Project,
+  ProjectTag,
+  ProjectState,
+  Blog,
+  BlogTag,
+  Comment,
+];
 
 const syncDatabase = async () => {
   try {
