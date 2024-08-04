@@ -6,7 +6,6 @@ import {
   projectStateUpdateValidation,
 } from "../validations/projectState";
 import { ProjectStateController } from "../controllers/projectState";
-import { ProjectTagController } from "../controllers/projectTag";
 
 const projectStateRouter = Router();
 
