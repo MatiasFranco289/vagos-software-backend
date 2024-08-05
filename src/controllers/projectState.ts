@@ -2,7 +2,12 @@ import { ApiResponse } from "../interfaces";
 import ProjectState from "../models/ProjectState";
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../constants";
-import { getErrorMessages, getArrayFromCSV } from "../utils";
+import {
+  getErrorMessages,
+  getArrayFromCSV,
+  handleError,
+  checkIfNotFound,
+} from "../utils";
 
 export const ProjectStateController = {
   createProjectState: async (
@@ -13,7 +18,7 @@ export const ProjectStateController = {
 
     let newProjectState: ProjectState[] | null = null;
 
-    const response: ApiResponse<ProjectState> = {
+    let response: ApiResponse<ProjectState> = {
       statusCode: STATUS_CODE.created,
       message: "Project State successfully created",
       data: [],
@@ -64,9 +69,7 @@ export const ProjectStateController = {
 
       response.data = newProjectState;
     } catch (err) {
-      console.log(err);
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -78,15 +81,15 @@ export const ProjectStateController = {
     const { id } = req.params;
     const { new_project_state_name } = req.body;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
 
-    let ammountOfUpdatedProjectStates;
+    let amountOfUpdatedProjectStates;
     try {
-      ammountOfUpdatedProjectStates = await ProjectState.update(
+      amountOfUpdatedProjectStates = await ProjectState.update(
         { name: new_project_state_name },
         {
           where: {
@@ -95,15 +98,16 @@ export const ProjectStateController = {
           },
         }
       );
+
+      checkIfNotFound(amountOfUpdatedProjectStates);
+
       response.message +=
-        ammountOfUpdatedProjectStates[0] +
+        amountOfUpdatedProjectStates[0] +
         " Project State" +
-        (ammountOfUpdatedProjectStates[0] > 1 ? "s" : "");
-      response.data = ammountOfUpdatedProjectStates;
+        (amountOfUpdatedProjectStates[0] > 1 ? "s" : "");
+      response.data = amountOfUpdatedProjectStates;
     } catch (err) {
-      console.log(err);
-      response.statusCode = STATUS_CODE.conflict;
-      response.message = getErrorMessages(err);
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -114,7 +118,7 @@ export const ProjectStateController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
@@ -133,9 +137,10 @@ export const ProjectStateController = {
           },
         }
       );
+
+      checkIfNotFound(deletedProjectStates);
     } catch (err) {
-      response.statusCode = STATUS_CODE.internalServerError;
-      response.message = "Something went wrong";
+      response = handleError(err);
     }
 
     response.message +=
@@ -152,7 +157,7 @@ export const ProjectStateController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<ProjectState | null> = {
+    let response: ApiResponse<ProjectState | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved Project States",
       data: [],
@@ -167,10 +172,12 @@ export const ProjectStateController = {
           id: idToFind,
         },
       });
+
+      checkIfNotFound(projectStates);
+
       response.data = projectStates;
     } catch (err) {
-      response.statusCode = STATUS_CODE.internalServerError;
-      response.message = "Something went wrong";
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -179,7 +186,7 @@ export const ProjectStateController = {
     req: Request,
     res: Response<ApiResponse<ProjectState | null>>
   ) => {
-    const response: ApiResponse<ProjectState | null> = {
+    let response: ApiResponse<ProjectState | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved All Project States",
       data: [],
@@ -189,10 +196,10 @@ export const ProjectStateController = {
 
     try {
       projectStates = await ProjectState.findAll();
+      checkIfNotFound(projectStates);
       response.data = projectStates;
     } catch (err) {
-      response.statusCode = STATUS_CODE.internalServerError;
-      response.message = "Something went wrong";
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
