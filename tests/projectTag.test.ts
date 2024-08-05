@@ -12,10 +12,7 @@ const projectTagsToCreate = [
 describe("/api/project-tag", () => {
   // I delete all project-tags and create news before each test
   beforeEach(async () => {
-    await ProjectTag.destroy({
-      where: {},
-      truncate: true,
-    });
+    await ProjectTag.truncate({});
 
     await ProjectTag.bulkCreate(projectTagsToCreate);
   });
