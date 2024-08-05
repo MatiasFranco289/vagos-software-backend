@@ -2,7 +2,7 @@ import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import Project from "../models/Project";
 import { QUERY_LIMIT, STATUS_CODE } from "../constants";
-import { getArrayFromCSV, getErrorMessages } from "../utils";
+import { checkIfNotFound, getArrayFromCSV, handleError } from "../utils";
 import ProjectTag from "../models/ProjectTag";
 import { OrderItem } from "sequelize";
 
@@ -14,7 +14,7 @@ export const ProjectController = {
     const { id } = req.params;
     const { order_by } = req.query;
 
-    const response: ApiResponse<Project | null> = {
+    let response: ApiResponse<Project | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully retrieved project",
       data: [],
@@ -43,19 +43,9 @@ export const ProjectController = {
         },
         order: [order],
       });
+      checkIfNotFound(projects);
     } catch (err) {
-      console.log(err);
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.internalServerError;
-    }
-
-    //If nothing was found
-    if (projects.length === 0) {
-      response.statusCode = STATUS_CODE.notFound;
-      response.message =
-        "The requested project" +
-        (idToFind.length > 1 ? "s were " : " was ") +
-        "not found";
+      response = handleError(err);
     }
 
     if (projects.length > 1) response.message += "s";
@@ -71,7 +61,7 @@ export const ProjectController = {
     const { limit } = req.query;
     const { offset } = req.query;
 
-    const response: ApiResponse<Project | null> = {
+    let response: ApiResponse<Project | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully retrieved project",
       data: [],
@@ -98,19 +88,9 @@ export const ProjectController = {
         limit: limit ? parseInt(limit.toString()) : QUERY_LIMIT,
         offset: offset ? parseInt(offset.toString()) : 0,
       });
+      checkIfNotFound(projects);
     } catch (err) {
-      console.log(err);
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.internalServerError;
-    }
-
-    //If nothing was found
-    if (projects.length === 0) {
-      response.statusCode = STATUS_CODE.notFound;
-      response.message =
-        "The requested project" +
-        //(idToFind.length > 1 ? "s were " : " was ") +
-        "not found";
+      response = handleError(err);
     }
 
     if (projects.length > 1) response.message += "s";
