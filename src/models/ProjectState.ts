@@ -4,6 +4,7 @@ import sequelize from "../config/databaseConnection";
 class ProjectState extends Model {
   declare id: number;
   name: string;
+  isActive: boolean;
 }
 
 ProjectState.init(
@@ -16,6 +17,12 @@ ProjectState.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {
