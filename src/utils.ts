@@ -1,3 +1,6 @@
+import { STATUS_CODE } from "./constants";
+import { ApiResponse } from "./interfaces";
+
 /**
  * Checks if a given string is a comma-separated list of numbers.
  *
@@ -109,4 +112,49 @@ export const getErrorMessages = (error) => {
   message = message.substring(0, message.length - lineEnd.length);
 
   return message;
+};
+
+/**
+ *This function returns a json value corresponding with the error that is passed to it
+ *
+ * @param error - The error obtained with a try catch
+ * @returns response - A json value that contains 'statusCode' and 'message'
+ */
+export const handleError = (error) => {
+  //console.log(error);
+
+  //500 internal server error
+  let response: ApiResponse<null> = {
+    statusCode: STATUS_CODE.internalServerError,
+    message: "Internal Server Error",
+    data: [],
+  };
+
+  //409 conflict
+  if (error.errors && error.errors[0].type === "unique violation") {
+    response.message = error.errors[0].value + " already exists";
+    response.statusCode = STATUS_CODE.conflict;
+  }
+
+  //404 not found
+  if (error.message && error.message === "Not Found") {
+    response.message = "Not Found";
+    response.statusCode = STATUS_CODE.notFound;
+  }
+
+  return response;
+};
+
+/**
+ * This function throws a Not Found error if 'value' is an empty array or equal to zero.
+ *
+ * This function must be called each time there's an update or get call in the API controllers,
+ * and it must receive the return value of the sequelize find, delete, or update, functions.
+ *
+ * @param value - The return value of the sequelize function
+ */
+export const checkIfNotFound = (value) => {
+  if (value == 0 || (value.constructor === Array && value.length == 0)) {
+    throw new Error("Not Found");
+  }
 };

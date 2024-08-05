@@ -7,6 +7,8 @@ import { startServer } from "./config/server";
 import { DEVELOPMENT_ENVIRONMENT, PRODUCTION_ENVIRONMENT } from "./constants";
 import projectTagRouter from "./routes/projectTag";
 import blogTagRouter from "./routes/blogTag";
+import projectStateRouter from "./routes/projectState";
+import userStateRouter from "./routes/userState";
 import projectRouter from "./routes/project";
 
 dotenv.config();
@@ -27,7 +29,9 @@ app.use("/api", apiRouter);
 
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/role", roleRouter);
+apiRouter.use("/user-state", userStateRouter);
 apiRouter.use("/project-tag", projectTagRouter);
+apiRouter.use("/project-state", projectStateRouter);
 apiRouter.use("/blog-tag", blogTagRouter);
 apiRouter.use("/project", projectRouter);
 

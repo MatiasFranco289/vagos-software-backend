@@ -4,6 +4,7 @@ import sequelize from "../config/databaseConnection";
 class UserState extends Model {
   declare id: number;
   name: string;
+  isActive: boolean;
 }
 
 UserState.init(
@@ -17,6 +18,11 @@ UserState.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {

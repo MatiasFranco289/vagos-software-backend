@@ -1,7 +1,7 @@
 import { ApiResponse } from "../interfaces";
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import ProjectTag from "../models/ProjectTag";
-import { getArrayFromCSV } from "../utils";
+import { checkIfNotFound, getArrayFromCSV, handleError } from "../utils";
 import { STATUS_CODE } from "../constants";
 
 export const ProjectTagController = {
@@ -11,7 +11,7 @@ export const ProjectTagController = {
   ) => {
     const { project_tag_name } = req.body;
 
-    const response: ApiResponse<ProjectTag | null> = {
+    let response: ApiResponse<ProjectTag | null> = {
       statusCode: STATUS_CODE.created,
       message: "Project Tags Successfully Created",
       data: [],
@@ -27,14 +27,7 @@ export const ProjectTagController = {
       );
       response.data = newTags;
     } catch (err) {
-      //Iterate over the errors and show them in the response
-      let message: string = "";
-      err.errors.forEach((element) => {
-        message += element.message + ": " + element.value;
-      });
-
-      response.message = message;
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -46,15 +39,14 @@ export const ProjectTagController = {
     const { id } = req.params;
     const { new_project_tag_name } = req.body;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
 
-    let updatedProjectTags;
     try {
-      updatedProjectTags = await ProjectTag.update(
+      const updatedProjectTags = await ProjectTag.update(
         { name: new_project_tag_name },
         {
           where: {
@@ -62,16 +54,14 @@ export const ProjectTagController = {
           },
         }
       );
+      checkIfNotFound(updatedProjectTags);
       response.message +=
         updatedProjectTags[0] +
         " Project Tag" +
         (updatedProjectTags[0] > 1 ? "s" : "");
       response.data = [updatedProjectTags[0]];
     } catch (err) {
-      console.log(err);
-      response.statusCode = STATUS_CODE.conflict;
-      response.message =
-        "The specified role name already exists, the new role name must be unique";
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -82,23 +72,29 @@ export const ProjectTagController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
 
-    let idToFind: Array<string> = getArrayFromCSV(id);
+    const idToFind: Array<string> = getArrayFromCSV(id);
 
-    const deletedRoles = await ProjectTag.destroy({
-      where: {
-        id: idToFind,
-      },
-    });
-
-    response.message +=
-      deletedRoles + " Project Tag" + (deletedRoles != 1 ? "s" : "");
-    response.data = [deletedRoles];
+    try {
+      const amountOfDeleteTags = await ProjectTag.destroy({
+        where: {
+          id: idToFind,
+        },
+      });
+      checkIfNotFound(amountOfDeleteTags);
+      response.message +=
+        amountOfDeleteTags +
+        " Project Tag" +
+        (amountOfDeleteTags != 1 ? "s" : "");
+      response.data = [amountOfDeleteTags];
+    } catch (err) {
+      response = handleError(err);
+    }
 
     res.status(response.statusCode).json(response);
   },
@@ -108,21 +104,27 @@ export const ProjectTagController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<ProjectTag | null> = {
+    let response: ApiResponse<ProjectTag | null> = {
       statusCode: STATUS_CODE.ok,
-      message: "Successfully Retrieved Roles",
+      message: "Successfully Retrieved Tags",
       data: [],
     };
 
-    let idToFind: Array<string> = getArrayFromCSV(id);
+    try {
+      let idToFind: Array<string> = getArrayFromCSV(id);
 
-    const roles = await ProjectTag.findAll({
-      where: {
-        id: idToFind,
-      },
-    });
+      const tags = await ProjectTag.findAll({
+        where: {
+          id: idToFind,
+        },
+      });
 
-    response.data = roles;
+      checkIfNotFound(tags);
+
+      response.data = tags;
+    } catch (err) {
+      response = handleError(err);
+    }
 
     res.status(response.statusCode).json(response);
   },
@@ -130,16 +132,19 @@ export const ProjectTagController = {
     req: Request,
     res: Response<ApiResponse<ProjectTag>>
   ) => {
-    const response: ApiResponse<ProjectTag> = {
+    let response: ApiResponse<ProjectTag> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved All Project Tags",
       data: [],
     };
 
-    const roles = await ProjectTag.findAll();
-
-    response.data = roles;
-
+    try {
+      const tags = await ProjectTag.findAll();
+      checkIfNotFound(tags);
+      response.data = tags;
+    } catch (err) {
+      response = handleError(err);
+    }
     res.status(response.statusCode).json(response);
   },
 };

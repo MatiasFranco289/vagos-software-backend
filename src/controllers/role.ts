@@ -1,7 +1,7 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import Role from "../models/Role";
-import { getArrayFromCSV } from "../utils";
+import { checkIfNotFound, getArrayFromCSV, handleError } from "../utils";
 import { STATUS_CODE } from "../constants";
 
 export const RoleController = {
@@ -10,7 +10,7 @@ export const RoleController = {
 
     let newRole: Role[] | null = null;
 
-    const response: ApiResponse<Role> = {
+    let response: ApiResponse<Role | null> = {
       statusCode: STATUS_CODE.created,
       message: "Role Successfully Created",
       data: [],
@@ -51,17 +51,7 @@ export const RoleController = {
 
       response.data = newRole;
     } catch (err) {
-      console.log(err);
-      if (err.errors[0].type === "unique violation") {
-        //Iterate over the errors and show them in the response
-        let message: string = "";
-        err.errors.forEach((element) => {
-          message += element.message + ": " + element.value;
-        });
-
-        response.message = message;
-        response.statusCode = STATUS_CODE.conflict;
-      }
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -70,13 +60,13 @@ export const RoleController = {
     const { id } = req.params;
     const { new_role_name } = req.body;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
 
-    let updatedRoles;
+    let updatedRoles: number[];
     try {
       updatedRoles = await Role.update(
         { name: new_role_name },
@@ -87,16 +77,12 @@ export const RoleController = {
           },
         }
       );
+      checkIfNotFound(updatedRoles);
       response.message +=
         updatedRoles[0] + " Role" + (updatedRoles[0] > 1 ? "s" : "");
       response.data = updatedRoles;
     } catch (err) {
-      console.log(err);
-      if (err.errors[0].type === "unique violation") {
-        response.statusCode = STATUS_CODE.conflict;
-        response.message =
-          "The specified role name already exists, the new role name must be unique";
-      }
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -104,7 +90,7 @@ export const RoleController = {
   deleteRole: async (req: Request, res: Response<ApiResponse<number>>) => {
     const { id } = req.params;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
@@ -112,19 +98,23 @@ export const RoleController = {
 
     let idToFind: Array<string> = getArrayFromCSV(id);
 
-    const deletedRoles = await Role.update(
-      { isActive: false },
-      {
-        where: {
-          id: idToFind,
-          isActive: true,
-        },
-      }
-    );
-
-    response.message +=
-      deletedRoles[0] + " Role" + (deletedRoles[0] != 1 ? "s" : "");
-    response.data = deletedRoles;
+    try {
+      const deletedRoles = await Role.update(
+        { isActive: false },
+        {
+          where: {
+            id: idToFind,
+            isActive: true,
+          },
+        }
+      );
+      checkIfNotFound(deletedRoles);
+      response.message +=
+        deletedRoles[0] + " Role" + (deletedRoles[0] != 1 ? "s" : "");
+      response.data = deletedRoles;
+    } catch (err) {
+      response = handleError(err);
+    }
 
     res.status(response.statusCode).json(response);
   },
@@ -150,15 +140,19 @@ export const RoleController = {
     res.status(response.statusCode).json(response);
   },
   getAllRoles: async (req: Request, res: Response<ApiResponse<Role>>) => {
-    const response: ApiResponse<Role | null> = {
+    let response: ApiResponse<Role | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved All Roles",
       data: [],
     };
 
-    const roles = await Role.findAll();
-
-    response.data = roles;
+    try {
+      const roles = await Role.findAll();
+      checkIfNotFound(roles);
+      response.data = roles;
+    } catch (err) {
+      response = handleError(response);
+    }
 
     res.status(response.statusCode).json(response);
   },
