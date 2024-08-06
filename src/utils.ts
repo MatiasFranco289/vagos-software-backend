@@ -93,6 +93,99 @@ export const isStringOrArrayOfStrings = (value, valueName: string) => {
 };
 
 /**
+ * Checks if the given string is a valid email
+ * @param value - The string to be evaluated
+ * @returns - 'true' if its a valid email, 'false' otherwise
+ */
+export const isEmail = (value: string) => {
+  return /.+@.+\..+/.test(value);
+};
+
+/**
+ * Returns an array with the elements present in 'arr1' AND 'arr2'.
+ *
+ * If 'invert' is true, then returns an array with the elements present in 'arr1' AND NOT IN 'arr2'
+ *
+ * @param arr1 - array of any type
+ * @param arr2 - array of any type
+ * @param invert - boolean, with default value 'false'. If true, returns the elements present in 'arr1' AND NOT IN 'arr2'
+ * @returns - array with the elements present in 'arr1' AND 'arr2' if invert=false, or array with the elements present in 'arr1' AND NOT IN 'arr2' if invert=true
+ */
+export const getElementsFromArray = (
+  arr1: Array<any>,
+  arr2: Array<any>,
+  invert: boolean = false
+) => {
+  return arr1.filter((element) =>
+    invert ? !arr2.includes(element) : arr2.includes(element)
+  );
+};
+
+/**
+ * Returns a JSON with the keys from keyArray and its values
+ */
+export const getJSONfromKeyArray = (keyArray: Array<string>, jsonValue) => {
+  //Check if the provided json has the same (or at least some of the same) keys as the keyArray
+  const keys: Array<any> = getElementsFromArray(
+    Object.keys(jsonValue),
+    keyArray
+  );
+
+  let jsonReturn = {};
+
+  if (keys.length > 0) {
+    keys.forEach((key) => {
+      jsonReturn[key] = jsonValue[key];
+    });
+  }
+
+  return jsonReturn;
+};
+
+/**
+ * Replaces the keys of a JSON object based on a provided mapping of old keys to new keys.
+ *
+ * @param newKeys - An object where each key is an old key from the JSON object and the corresponding value is the new key that should replace it.
+ * @param jsonValue - The JSON object whose keys are to be replaced.
+ * @returns A new JSON object with the keys replaced according to the provided mapping. Keys in the original JSON object that are not specified in the mapping remain unchanged.
+ *
+ * @example
+ * const newKeys = {
+ *   "oldKey1": "newKey1",
+ *   "oldKey2": "newKey2"
+ * };
+ *
+ * const jsonValue = {
+ *   "oldKey1": "value1",
+ *   "oldKey2": "value2",
+ *   "unchangedKey": "value3"
+ * };
+ *
+ * const result = replaceJSONkeys(newKeys, jsonValue);
+ * console.log(result);
+ * // Output: { newKey1: 'value1', newKey2: 'value2', unchangedKey: 'value3' }
+ */
+export const replaceJSONkeys = (newKeys, jsonValue) => {
+  const newKeysArray = Object.keys(newKeys);
+  let jsonKeysArray = Object.keys(jsonValue);
+
+  let newJSON = {};
+
+  const sameKeysArray = getElementsFromArray(jsonKeysArray, newKeysArray); //get the keys that appear in both jsonValue and newKeys
+  jsonKeysArray = getElementsFromArray(jsonKeysArray, sameKeysArray, true); //get the keys that only appear in jsonKeysArray
+
+  sameKeysArray.forEach((oldKey) => {
+    newJSON[newKeys[oldKey]] = jsonValue[oldKey];
+  });
+
+  jsonKeysArray.forEach((key) => {
+    newJSON[key] = jsonValue[key];
+  });
+
+  return newJSON;
+};
+
+/**
  *
  * Return a string with a list of messages provided by the error.
  *
@@ -121,7 +214,7 @@ export const getErrorMessages = (error) => {
  * @returns response - A json value that contains 'statusCode' and 'message'
  */
 export const handleError = (error) => {
-  //console.log(error);
+  console.log(error);
 
   //500 internal server error
   let response: ApiResponse<null> = {
@@ -154,7 +247,7 @@ export const handleError = (error) => {
  * @param value - The return value of the sequelize function
  */
 export const checkIfNotFound = (value) => {
-  if (value == 0 || (value.constructor === Array && value.length == 0)) {
+  if (value == 0 || (Array.isArray(value) && value.length == 0)) {
     throw new Error("Not Found");
   }
 };
