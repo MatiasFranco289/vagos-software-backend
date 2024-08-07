@@ -60,6 +60,7 @@ export const ProjectController = {
       project_image: "image",
       project_start_date: "startDate",
       project_end_date: "endDate",
+      project_is_active: "isActive",
     };
 
     let response: ApiResponse<number | null> = {

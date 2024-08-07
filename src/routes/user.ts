@@ -12,7 +12,7 @@ const userRouter = Router();
 
 userRouter.post("/", userCreateValidation, UserController.createUser);
 userRouter.put("/:id", userUpdateValidation, UserController.updateUser);
-userRouter.delete("/:id", userDeleteValidation, UserController.deleteUser);
+//userRouter.delete("/:id", userDeleteValidation, UserController.deleteUser);
 userRouter.get("/:id", userGetValidation, UserController.getUser);
 userRouter.get("/", userGetAllValidation, UserController.getAllUsers);
 
