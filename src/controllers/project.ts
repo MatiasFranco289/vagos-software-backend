@@ -18,6 +18,8 @@ export const ProjectController = {
   ) => {
     const { state_id } = req.body;
     const { creator_id } = req.body;
+    const { project_start_date } = req.body;
+    const { project_end_date } = req.body;
     const { project_name } = req.body;
     const { project_image } = req.body;
     const { project_content } = req.body;
@@ -32,6 +34,8 @@ export const ProjectController = {
       const newProject = await Project.create({
         stateId: state_id,
         creatorId: creator_id,
+        startDate: project_start_date,
+        endDate: project_end_date,
         name: project_name,
         image: project_image,
         content: project_content,
@@ -53,6 +57,9 @@ export const ProjectController = {
       creator_id: "creatorId",
       project_name: "name",
       project_content: "content",
+      project_image: "image",
+      project_start_date: "startDate",
+      project_end_date: "endDate",
     };
 
     let response: ApiResponse<number | null> = {
@@ -97,7 +104,7 @@ export const ProjectController = {
       checkIfNotFound(projectsInTable);
       response.data = projectsInTable;
     } catch (err) {
-      response = handleError(response);
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);

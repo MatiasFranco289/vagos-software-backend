@@ -35,7 +35,7 @@ const syncDatabase = async () => {
 
     // If this parameter is TRUE all tables will be destroyed and recreated during initialization
     await createAssociations();
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
   } catch (err) {
     console.error(

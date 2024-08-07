@@ -3,12 +3,16 @@ import { validateResult } from "../middlewares/validateMiddleware";
 import { hasUnwantedKeys, isCsvNumbers } from "../utils";
 import { ORDER_BY } from "../constants";
 
+//When there's an update, only a json with these keys will be accepted
 const allowedKeys: Array<string> = [
   "state_id",
   "creator_id",
   "project_name",
   "project_image",
   "project_content",
+  "project_start_date",
+  "project_end_date",
+  "isActive",
 ];
 
 export const projectCreateValidation = [
@@ -36,6 +40,14 @@ export const projectCreateValidation = [
     .withMessage("content must be provided")
     .isString()
     .withMessage("content must be a string"),
+  body("project_start_date")
+    .optional()
+    .isDate()
+    .withMessage("project_start_date must be a string"),
+  body("project_start_end")
+    .optional()
+    .isDate()
+    .withMessage("project_start_end must be a string"),
   (req, res, next) => {
     validateResult(req, res, next);
   },

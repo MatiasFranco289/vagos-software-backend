@@ -8,8 +8,12 @@ class Project extends Model {
   declare id: number;
   declare stateId: number;
   declare creatorId: number;
+  startDate: Date;
+  endDate: Date;
+  image: string;
   name: string;
   content: Text;
+  isActive: boolean;
 }
 
 Project.init(
@@ -43,7 +47,7 @@ Project.init(
       type: DataTypes.DATE,
       field: "end_date",
     },
-    picture: {
+    image: {
       type: DataTypes.STRING,
     },
     name: {
@@ -54,6 +58,12 @@ Project.init(
     content: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      field: "is_active",
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {
