@@ -142,6 +142,15 @@ export const getJSONfromKeyArray = (keyArray: Array<string>, jsonValue) => {
   return jsonReturn;
 };
 
+export const hasUnwantedKeys = (allowedKeys: Array<string>, jsonValue) => {
+  const keys = Object.keys(jsonValue);
+  const unwantedKeys = keys.filter((key) => !allowedKeys.includes(key));
+
+  if (unwantedKeys.length > 0) throw new Error("JSON contains Unwanted keys");
+
+  return false;
+};
+
 /**
  * Replaces the keys of a JSON object based on a provided mapping of old keys to new keys.
  *

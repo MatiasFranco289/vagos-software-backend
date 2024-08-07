@@ -8,6 +8,7 @@ class Project extends Model {
   declare stateId: number;
   declare creatorId: number;
   name: string;
+  image: string;
   content: Text;
 }
 
@@ -19,30 +20,33 @@ Project.init(
       primaryKey: true,
     },
     stateId: {
-        type: DataTypes.INTEGER,
-        field: 'state_id',
-        references: {
-          model: ProjectState,
-          key: 'id'
-        }
+      type: DataTypes.INTEGER,
+      field: "state_id",
+      references: {
+        model: ProjectState,
+        key: "id",
+      },
     },
     creatorId: {
-        type: DataTypes.INTEGER,
-        field: 'creator_id',
-        references: {
-          model: User,
-          key: 'id'
-        }
+      type: DataTypes.INTEGER,
+      field: "creator_id",
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
+    image: {
+      type: DataTypes.STRING,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    }
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
   },
   {
     sequelize,
