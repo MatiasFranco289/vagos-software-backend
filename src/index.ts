@@ -36,6 +36,7 @@ apiRouter.use("/project-tag", projectTagRouter);
 apiRouter.use("/project-state", projectStateRouter);
 apiRouter.use("/project", projectRouter);
 apiRouter.use("/blog-tag", blogTagRouter);
+apiRouter.use("/project", projectRouter);
 
 // If the environment is dev or prod server is started here
 if (

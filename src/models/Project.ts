@@ -2,13 +2,13 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/databaseConnection";
 import ProjectState from "./ProjectState";
 import User from "./User";
+import { allowedNodeEnvironmentFlags } from "process";
 
 class Project extends Model {
   declare id: number;
   declare stateId: number;
   declare creatorId: number;
   name: string;
-  image: string;
   content: Text;
 }
 
@@ -35,7 +35,15 @@ Project.init(
         key: "id",
       },
     },
-    image: {
+    startDate: {
+      type: DataTypes.DATE,
+      field: "start_date",
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      field: "end_date",
+    },
+    picture: {
       type: DataTypes.STRING,
     },
     name: {
