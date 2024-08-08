@@ -13,3 +13,13 @@ export const STATUS_CODE = {
   conflict: 409,
   internalServerError: 500,
 };
+
+export const QUERY_LIMIT = 20; //Maximum ammount of rows to return in a query to the db
+export const ORDER_BY = [
+  "ALPH_ASC",
+  "ALPH_DESC",
+  "DATE_ASC",
+  "DATE_DESC",
+  "ID_ASC",
+  "ID_DESC",
+];
