@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "7883fe1b-74c7-4940-9851-8b0f95ff6de4",
+		"name": "API-VGS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37535789"
+	},
+	"item": [
+		{
+			"name": "Role",
+			"item": [
+				{
+					"name": "create role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role_name\":[\"Admin\", \"Developer\", \"Blogger\", \"Commenter\", \"Viewer\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/role",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all roles",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get one role",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get some roles",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "update role",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_role_name\": \"SuperAdmin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/role/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"role",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(soft) delete one role",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/role/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"role",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(soft) delete some roles",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/role/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"role",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "get all users - order_by error, returns valid values",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get all users with all query params",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "post user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role_id\": 1,\r\n    \"state_id\": 1,\r\n    \"username\": \"Vagos\",\r\n    \"email\": \"vagos@vagossoftware.com\",\r\n    \"password\": \"This isn't encrypted at all, it isn't safe, you should not use this\",\r\n    \"profile_picture\": \"https://i.kym-cdn.com/entries/icons/original/000/045/007/thousandyard.jpg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "there's no DELETE endpoint",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role_id\": 1,\r\n    \"state_id\": 2,\r\n    \"username\": \"Supervagodev\",\r\n    \"email\": \"email@email.email\",\r\n    \"password\": \"No, seriously, you shouldn't be using this at all\",\r\n    \"profile_picture\": \"https://i.kym-cdn.com/photos/images/original/002/693/383/59a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "soft delete user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"is_active\":false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "get all users with all query params Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state_id\": 2,\r\n    \"creator_id\": 1,\r\n    \"project_name\": \"asdasdadasdasd\",\r\n    \"project_content\": \"zxczxczxczxczxczx\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/project/?order_by=ID_DESC&limit=5&offset=0&creator_id=1&state_id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								""
+							],
+							"query": [
+								{
+									"key": "order_by",
+									"value": "ID_DESC"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "creator_id",
+									"value": "1"
+								},
+								{
+									"key": "state_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blog",
+			"item": [
+				{
+					"name": "get all blog",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/blog?order_by=DATE_ASC&offset=1&limit=4&project_id=2&creator_id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"blog"
+							],
+							"query": [
+								{
+									"key": "order_by",
+									"value": "DATE_ASC"
+								},
+								{
+									"key": "offset",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "4"
+								},
+								{
+									"key": "project_id",
+									"value": "2"
+								},
+								{
+									"key": "creator_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project_id\":2,\r\n    \"creator_id\":1,\r\n    \"blog_title\": \"asdasdsadasdsadas SOY UN BLOG asdasdsadasdadasdasdasd\",\r\n    \"blog_content\": \"zxczxczxcxzczxcxzczxczxczxczxczxczxczxczxczxczxczxczxczx\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/blog",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"blog"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
