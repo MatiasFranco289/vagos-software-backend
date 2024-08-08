@@ -1,7 +1,12 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import ProjectTag from "../models/ProjectTag";
-import { getArrayFromCSV, getErrorMessages } from "../utils";
+import {
+  checkIfNotFound,
+  getArrayFromCSV,
+  getErrorMessages,
+  handleError,
+} from "../utils";
 import { STATUS_CODE } from "../constants";
 import BlogTag from "../models/BlogTag";
 
@@ -12,7 +17,7 @@ export const BlogTagController = {
   ) => {
     const { blog_tag_name } = req.body;
 
-    const response: ApiResponse<BlogTag | null> = {
+    let response: ApiResponse<BlogTag | null> = {
       statusCode: STATUS_CODE.created,
       message: "Blog Tags Successfully Created",
       data: [],
@@ -28,9 +33,7 @@ export const BlogTagController = {
       );
       response.data = newTags;
     } catch (err) {
-      //Iterate over the errors and show them in the response
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -42,15 +45,14 @@ export const BlogTagController = {
     const { id } = req.params;
     const { new_blog_tag_name } = req.body;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
 
-    let numberOfUpdatedTags;
     try {
-      numberOfUpdatedTags = await BlogTag.update(
+      const amountOfUpdatedTags: number[] = await BlogTag.update(
         { name: new_blog_tag_name },
         {
           where: {
@@ -58,14 +60,14 @@ export const BlogTagController = {
           },
         }
       );
+      checkIfNotFound(amountOfUpdatedTags);
       response.message +=
-        numberOfUpdatedTags[0] +
+        amountOfUpdatedTags[0] +
         " Blog Tag" +
-        (numberOfUpdatedTags[0] != 1 ? "s" : "");
-      response.data = [numberOfUpdatedTags[0]];
+        (amountOfUpdatedTags[0] != 1 ? "s" : "");
+      response.data = [amountOfUpdatedTags[0]];
     } catch (err) {
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -76,32 +78,29 @@ export const BlogTagController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
 
-    let idToFind: Array<string> = getArrayFromCSV(id);
-
-    let numberOfDeletedTags: number;
+    const idToFind: Array<string> = getArrayFromCSV(id);
 
     try {
-      numberOfDeletedTags = await BlogTag.destroy({
+      const amountOfDeletedTags: number = await BlogTag.destroy({
         where: {
           id: idToFind,
         },
       });
+      checkIfNotFound(amountOfDeletedTags);
+      response.message +=
+        amountOfDeletedTags +
+        " Project Tag" +
+        (amountOfDeletedTags != 1 ? "s" : "");
+      response.data = [amountOfDeletedTags];
     } catch (err) {
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
-
-    response.message +=
-      numberOfDeletedTags +
-      " Project Tag" +
-      (numberOfDeletedTags != 1 ? "s" : "");
-    response.data = [numberOfDeletedTags];
 
     res.status(response.statusCode).json(response);
   },
@@ -111,27 +110,25 @@ export const BlogTagController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<BlogTag | null> = {
+    let response: ApiResponse<BlogTag | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved Blog Tags",
       data: [],
     };
 
-    let idToFind: Array<string> = getArrayFromCSV(id);
-    let blogTagsInTable: BlogTag[];
+    const idToFind: Array<string> = getArrayFromCSV(id);
 
     try {
-      blogTagsInTable = await BlogTag.findAll({
+      const blogTagsInTable: BlogTag[] = await BlogTag.findAll({
         where: {
           id: idToFind,
         },
       });
+      checkIfNotFound(blogTagsInTable);
+      response.data = blogTagsInTable;
     } catch (err) {
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
-
-    response.data = blogTagsInTable;
 
     res.status(response.statusCode).json(response);
   },
@@ -139,15 +136,19 @@ export const BlogTagController = {
     req: Request,
     res: Response<ApiResponse<BlogTag | null>>
   ) => {
-    const response: ApiResponse<BlogTag> = {
+    let response: ApiResponse<BlogTag> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved All Blog Tags",
       data: [],
     };
 
-    const blogTagsInTable = await BlogTag.findAll();
-
-    response.data = blogTagsInTable;
+    try {
+      const blogTagsInTable = await BlogTag.findAll();
+      checkIfNotFound(blogTagsInTable);
+      response.data = blogTagsInTable;
+    } catch (err) {
+      response = handleError(err);
+    }
 
     res.status(response.statusCode).json(response);
   },

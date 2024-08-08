@@ -1,7 +1,7 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
 import { STATUS_CODE } from "../constants";
-import { getErrorMessages, getArrayFromCSV } from "../utils";
+import { getArrayFromCSV, handleError, checkIfNotFound } from "../utils";
 import UserState from "../models/UserState";
 
 export const UserStateController = {
@@ -13,7 +13,7 @@ export const UserStateController = {
 
     let newUserState: UserState[] | null = null;
 
-    const response: ApiResponse<UserState> = {
+    let response: ApiResponse<UserState> = {
       statusCode: STATUS_CODE.created,
       message: "User State successfully created",
       data: [],
@@ -62,9 +62,7 @@ export const UserStateController = {
 
       response.data = newUserState;
     } catch (err) {
-      console.log(err);
-      response.message = getErrorMessages(err);
-      response.statusCode = STATUS_CODE.conflict;
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -76,7 +74,7 @@ export const UserStateController = {
     const { id } = req.params;
     const { new_user_state_name } = req.body;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
@@ -93,15 +91,16 @@ export const UserStateController = {
           },
         }
       );
+
+      checkIfNotFound(amountOfUpdatedUserStates);
+
       response.message +=
         amountOfUpdatedUserStates[0] +
         " User State" +
         (amountOfUpdatedUserStates[0] > 1 ? "s" : "");
       response.data = amountOfUpdatedUserStates;
     } catch (err) {
-      console.log(err);
-      response.statusCode = STATUS_CODE.conflict;
-      response.message = getErrorMessages(err);
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -112,7 +111,7 @@ export const UserStateController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<number | null> = {
+    let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
@@ -131,16 +130,17 @@ export const UserStateController = {
           },
         }
       );
-    } catch (err) {
-      response.statusCode = STATUS_CODE.internalServerError;
-      response.message = "Something went wrong";
-    }
 
-    response.message +=
-      deletedUserStates[0] +
-      " User State" +
-      (deletedUserStates[0] != 1 ? "s" : "");
-    response.data = deletedUserStates;
+      checkIfNotFound(deletedUserStates);
+
+      response.message +=
+        deletedUserStates[0] +
+        " User State" +
+        (deletedUserStates[0] != 1 ? "s" : "");
+      response.data = deletedUserStates;
+    } catch (err) {
+      response = handleError(err);
+    }
 
     res.status(response.statusCode).json(response);
   },
@@ -150,7 +150,7 @@ export const UserStateController = {
   ) => {
     const { id } = req.params;
 
-    const response: ApiResponse<UserState | null> = {
+    let response: ApiResponse<UserState | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved User States",
       data: [],
@@ -165,10 +165,10 @@ export const UserStateController = {
           id: idToFind,
         },
       });
+      checkIfNotFound(userStates);
       response.data = userStates;
     } catch (err) {
-      response.statusCode = STATUS_CODE.internalServerError;
-      response.message = "Something went wrong";
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
@@ -177,7 +177,7 @@ export const UserStateController = {
     req: Request,
     res: Response<ApiResponse<UserState | null>>
   ) => {
-    const response: ApiResponse<UserState | null> = {
+    let response: ApiResponse<UserState | null> = {
       statusCode: STATUS_CODE.ok,
       message: "Successfully Retrieved All User States",
       data: [],
@@ -187,10 +187,10 @@ export const UserStateController = {
 
     try {
       userStates = await UserState.findAll();
+      checkIfNotFound(userStates);
       response.data = userStates;
     } catch (err) {
-      response.statusCode = STATUS_CODE.internalServerError;
-      response.message = "Something went wrong";
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
