@@ -58,6 +58,7 @@ export const UserController = {
       role_id: "roleId",
       state_id: "stateId",
       profile_pic: "profilePic",
+      is_active: "isActive",
     };
 
     //Used to filter only the wanted elements from req.body.
@@ -69,6 +70,7 @@ export const UserController = {
       "email",
       "password",
       "profilePicture",
+      "isActive",
     ];
 
     let response: ApiResponse<number | null> = {
@@ -98,6 +100,8 @@ export const UserController = {
 
     res.status(response.statusCode).json(response);
   },
+
+  /*
   deleteUser: async (
     req: Request,
     res: Response<ApiResponse<number | null>>
@@ -127,6 +131,7 @@ export const UserController = {
 
     res.status(response.statusCode).json(response);
   },
+  */
   getUser: async (req: Request, res: Response<ApiResponse<User | null>>) => {
     const { id } = req.params;
 

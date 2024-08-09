@@ -11,6 +11,7 @@ class User extends Model {
   email: string;
   password: string;
   profilePicture: string;
+  isActive: boolean;
 }
 
 User.init(
@@ -54,6 +55,12 @@ User.init(
     },
     profilePicture: {
       type: DataTypes.STRING,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      field: "is_active",
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {

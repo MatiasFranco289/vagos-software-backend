@@ -34,6 +34,7 @@ apiRouter.use("/user-state", userStateRouter);
 apiRouter.use("/user", userRouter);
 apiRouter.use("/project-tag", projectTagRouter);
 apiRouter.use("/project-state", projectStateRouter);
+apiRouter.use("/project", projectRouter);
 apiRouter.use("/blog-tag", blogTagRouter);
 apiRouter.use("/project", projectRouter);
 

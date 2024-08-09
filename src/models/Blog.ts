@@ -9,38 +9,45 @@ class Blog extends Model {
   declare creatorId: number;
   title: string;
   content: Text;
+  isActive: boolean;
 }
 
 Blog.init(
   {
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
     projectId: {
-        type: DataTypes.INTEGER,
-        field: 'project_id',
-        references: {
-            model: Project,
-            key: 'id'
-        }
+      type: DataTypes.INTEGER,
+      field: "project_id",
+      references: {
+        model: Project,
+        key: "id",
+      },
     },
     creatorId: {
-        type: DataTypes.INTEGER,
-        field: 'creator_id',
-        references: {
-            model: User,
-            key: 'id'
-        }
+      type: DataTypes.INTEGER,
+      field: "creator_id",
+      references: {
+        model: User,
+        key: "id",
+      },
     },
     title: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      field: "is_active",
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {
