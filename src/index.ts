@@ -10,6 +10,7 @@ import blogTagRouter from "./routes/blogTag";
 import projectStateRouter from "./routes/projectState";
 import userStateRouter from "./routes/userState";
 import userRouter from "./routes/user";
+import projectRouter from "./routes/project";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ apiRouter.use("/user", userRouter);
 apiRouter.use("/project-tag", projectTagRouter);
 apiRouter.use("/project-state", projectStateRouter);
 apiRouter.use("/blog-tag", blogTagRouter);
+apiRouter.use("/project", projectRouter);
 
 // If the environment is dev or prod server is started here
 if (
