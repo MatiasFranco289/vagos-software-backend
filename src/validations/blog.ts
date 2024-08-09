@@ -3,85 +3,63 @@ import { validateResult } from "../middlewares/validateMiddleware";
 import { hasUnwantedKeys, isCsvNumbers } from "../utils";
 import { ORDER_BY } from "../constants";
 
-//When there's an update, only a json with these keys will be accepted
-const allowedKeys: Array<string> = [
-  "state_id",
-  "creator_id",
-  "project_name",
-  "project_image",
-  "project_content",
-  "project_start_date",
-  "project_end_date",
-  "isActive",
-];
+const allowedKeys = ["project_id", "creator_id", "blog_title", "blog_content"];
 
-export const projectCreateValidation = [
-  body("state_id")
+export const blogCreateValidation = [
+  body("project_id")
     .exists()
-    .withMessage("state_id must be provided")
+    .withMessage("project_id must be provided")
     .isNumeric()
-    .withMessage("state_id must be a number"),
+    .withMessage("project_id must be a number"),
   body("creator_id")
     .exists()
     .withMessage("creator_id must be provided")
     .isNumeric()
     .withMessage("creator_id must be a number"),
-  body("project_name")
+  body("blog_title")
     .exists()
-    .withMessage("name must be provided")
+    .withMessage("blog_title must be provided")
     .isString()
-    .withMessage("name must be a string"),
-  body("project_image")
-    .optional()
-    .isString()
-    .withMessage("image must be a string"),
-  body("project_content")
+    .withMessage("blog_title must be a string"),
+  body("blog_content")
     .exists()
-    .withMessage("content must be provided")
+    .withMessage("blog_content must be provided")
     .isString()
-    .withMessage("content must be a string"),
-  body("project_start_date")
-    .optional()
-    .isDate()
-    .withMessage("project_start_date must be a string"),
-  body("project_start_end")
-    .optional()
-    .isDate()
-    .withMessage("project_start_end must be a string"),
+    .withMessage("blog_content must be a string"),
   (req, res, next) => {
     validateResult(req, res, next);
   },
 ];
 
-export const projectUpdateValidation = [
-  param("id").exists().isNumeric().withMessage("id must be a number"),
-  body("state_id")
+export const blogUpdateValidation = [
+  param("id")
+    .exists()
+    .withMessage("id must be provided")
+    .isNumeric()
+    .withMessage("id must be a number"),
+  body("project_id")
     .optional()
     .isNumeric()
-    .withMessage("state_id must be a number"),
+    .withMessage("project_id must be a number"),
   body("creator_id")
     .optional()
     .isNumeric()
     .withMessage("creator_id must be a number"),
-  body("project_name")
+  body("blog_title")
     .optional()
     .isString()
-    .withMessage("name must be a string"),
-  body("project_image")
+    .withMessage("blog_title must be a string"),
+  body("blog_content")
     .optional()
     .isString()
-    .withMessage("image must be a string"),
-  body("project_content")
-    .optional()
-    .isString()
-    .withMessage("content must be a string"),
+    .withMessage("blog_content must be a string"),
   (req, res, next) => {
     hasUnwantedKeys(allowedKeys, req.body);
     validateResult(req, res, next);
   },
 ];
 
-export const projectGetValidation = [
+export const blogGetValidation = [
   param("id")
     .exists()
     .withMessage("id must be provided")
@@ -95,7 +73,7 @@ export const projectGetValidation = [
   },
 ];
 
-export const projectGetAllValidation = [
+export const blogGetAllValidation = [
   query("order_by")
     .optional()
     .isString()
@@ -120,14 +98,14 @@ export const projectGetAllValidation = [
       return parseInt(value) >= 0;
     })
     .withMessage("offset must be a number greater than or equal to 0"),
+  query("project_id")
+    .optional()
+    .isNumeric()
+    .withMessage("project_id must be a number"),
   query("creator_id")
     .optional()
     .isNumeric()
     .withMessage("creator_id must be a number"),
-  query("state_id")
-    .optional()
-    .isNumeric()
-    .withMessage("state_id must be a number"),
   (req, res, next) => {
     validateResult(req, res, next);
   },

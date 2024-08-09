@@ -1,6 +1,6 @@
-import { Response, Request } from "express";
+import { Request, Response } from "express";
 import { ApiResponse } from "../interfaces";
-import Project from "../models/Project";
+import Blog from "../models/Blog";
 import { QUERY_LIMIT, STATUS_CODE } from "../constants";
 import {
   checkIfNotFound,
@@ -11,147 +11,133 @@ import {
 } from "../utils";
 import { OrderItem } from "sequelize";
 
-export const ProjectController = {
-  createProject: async (
-    req: Request,
-    res: Response<ApiResponse<Project | null>>
-  ) => {
-    const { state_id } = req.body;
+export const BlogController = {
+  createBlog: async (req: Request, res: Response<ApiResponse<Blog | null>>) => {
+    const { project_id } = req.body;
     const { creator_id } = req.body;
-    const { project_start_date } = req.body;
-    const { project_end_date } = req.body;
-    const { project_name } = req.body;
-    const { project_image } = req.body;
-    const { project_content } = req.body;
+    const { blog_title } = req.body;
+    const { blog_content } = req.body;
 
-    let response: ApiResponse<Project | null> = {
+    let response: ApiResponse<Blog | null> = {
       statusCode: STATUS_CODE.created,
-      message: "Project successfully created",
+      message: "Blog successfully created",
       data: [],
     };
 
     try {
-      const newProject = await Project.create({
-        stateId: state_id,
+      const newBlog = await Blog.create({
+        projectId: project_id,
         creatorId: creator_id,
-        startDate: project_start_date,
-        endDate: project_end_date,
-        name: project_name,
-        image: project_image,
-        content: project_content,
+        title: blog_title,
+        content: blog_content,
       });
-      response.data = [newProject];
+      response.data = [newBlog];
     } catch (err) {
       response = handleError(err);
     }
+
     res.status(response.statusCode).json(response);
   },
-  updateProject: async (
+  updateBlog: async (
     req: Request,
     res: Response<ApiResponse<number | null>>
   ) => {
     const { id } = req.params;
 
     const newKeys = {
-      state_id: "stateId",
+      project_id: "projectId",
       creator_id: "creatorId",
-      project_name: "name",
-      project_content: "content",
-      project_image: "image",
-      project_start_date: "startDate",
-      project_end_date: "endDate",
+      blog_title: "title",
+      blog_content: "content",
       is_active: "isActive",
     };
 
     let response: ApiResponse<number | null> = {
       statusCode: STATUS_CODE.ok,
-      message: "Project successfully updated",
+      message: "Successfully updated blog",
       data: [],
     };
 
     const updateParameters = replaceJSONkeys(newKeys, req.body);
 
     try {
-      const updatedProject = await Project.update(updateParameters, {
+      const updatedBlogs = await Blog.update(updateParameters, {
         where: {
           id: id,
         },
       });
-      checkIfNotFound(updatedProject[0]);
-      response.data = [updatedProject[0]];
+      checkIfNotFound(updatedBlogs[0]);
+      response.data = [updatedBlogs[0]];
     } catch (err) {
-      response = handleError(err);
+      response = handleError(response);
     }
 
     res.status(response.statusCode).json(response);
   },
-  getProject: async (
-    req: Request,
-    res: Response<ApiResponse<Project | null>>
-  ) => {
+  getBlog: async (req: Request, res: Response<ApiResponse<Blog | null>>) => {
     const { id } = req.params;
 
-    let response: ApiResponse<Project | null> = {
+    let response: ApiResponse<Blog | null> = {
       statusCode: STATUS_CODE.ok,
-      message: "Successfully retrieved Project",
+      message: "Successfully retrieved Blog",
       data: [],
     };
 
     try {
       const idToFind: Array<string> = getArrayFromCSV(id);
-      const projectsInTable = await Project.findAll({
+      const blogsInTable = await Blog.findAll({
         where: { id: idToFind },
       });
-      checkIfNotFound(projectsInTable);
-      response.data = projectsInTable;
+      checkIfNotFound(blogsInTable);
+      response.data = blogsInTable;
     } catch (err) {
       response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);
   },
-  getAllProjects: async (
+  getAllBlogs: async (
     req: Request,
-    res: Response<ApiResponse<Project | null>>
+    res: Response<ApiResponse<Blog | null>>
   ) => {
     const { order_by } = req.query;
     const { limit } = req.query;
     const { offset } = req.query;
 
     const newKeys = {
-      state_id: "stateId",
+      project_id: "projectId",
       creator_id: "creatorId",
     };
 
-    let response: ApiResponse<Project | null> = {
+    let response: ApiResponse<Blog | null> = {
       statusCode: STATUS_CODE.ok,
-      message: "Successfully retrieved projects",
+      message: "Successfully retrieved blogs",
       data: [],
     };
 
     let order: OrderItem = ["id", "ASC"];
-    //TODO: change this into a function
     if (order_by) {
-      if (order_by.toString().includes("ALPH")) order[0] = "name";
+      if (order_by.toString().includes("ALPH")) order[0] = "title";
       else if (order_by.toString().includes("DATE")) order[0] = "createdAt";
 
       if (order_by && order_by.toString().includes("DESC")) order[1] = "DESC";
     }
 
     const getParameters = getJSONfromKeyArray(
-      ["stateId", "creatorId"],
+      ["projectId", "stateId"],
       replaceJSONkeys(newKeys, req.query)
     );
+    console.log(getParameters);
 
     try {
-      const projectsInTable = await Project.findAll({
+      const blogsInTable = await Blog.findAll({
         order: [order],
         limit: limit ? parseInt(limit.toString()) : QUERY_LIMIT,
         offset: offset ? parseInt(offset.toString()) : 0,
         where: getParameters,
       });
-      checkIfNotFound(projectsInTable);
-      response.data = projectsInTable;
+      checkIfNotFound(blogsInTable);
+      response.data = blogsInTable;
     } catch (err) {
       response = handleError(err);
     }
