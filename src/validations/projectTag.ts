@@ -1,27 +1,14 @@
 import { body, param } from "express-validator";
 import { validateResult } from "../middlewares/validateMiddleware";
 import { isCsvNumbers } from "../utils";
-
+import { Request, Response, NextFunction } from "express";
 export const projectTagCreateValidation = [
-  body("project_tag_name")
+  body("name")
     .exists()
-    .withMessage("project_tag_name must be provided")
-    .custom((value) => {
-      //TODO: Change this into a function
-      if (typeof value === "string" && value.trim() !== "") {
-        return true;
-      }
-      if (
-        Array.isArray(value) &&
-        value.every((item) => typeof item === "string" && item.trim() !== "")
-      ) {
-        return true;
-      }
-      throw new Error(
-        "project_tag_name must be a non-empty string or an array of non-empty strings"
-      );
-    }),
-  (req, res, next) => {
+    .withMessage("name must be provided")
+    .notEmpty()
+    .withMessage("name cannot be empty"),
+  (req: Request, res: Response, next: NextFunction) => {
     validateResult(req, res, next);
   },
 ];

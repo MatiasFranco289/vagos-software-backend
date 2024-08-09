@@ -11,7 +11,7 @@ export const RoleController = {
     let newRole: Role[] | null = null;
 
     let response: ApiResponse<Role | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Role Successfully Created",
       data: [],
     };
@@ -54,14 +54,14 @@ export const RoleController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateRole: async (req: Request, res: Response<ApiResponse<number>>) => {
     const { id } = req.params;
     const { new_role_name } = req.body;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -85,13 +85,13 @@ export const RoleController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   deleteRole: async (req: Request, res: Response<ApiResponse<number>>) => {
     const { id } = req.params;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
@@ -116,13 +116,13 @@ export const RoleController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getRole: async (req: Request, res: Response<ApiResponse<Role>>) => {
     const { id } = req.params;
 
     const response: ApiResponse<Role | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved Roles",
       data: [],
     };
@@ -137,11 +137,11 @@ export const RoleController = {
 
     response.data = roles;
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllRoles: async (req: Request, res: Response<ApiResponse<Role>>) => {
     let response: ApiResponse<Role | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved All Roles",
       data: [],
     };
@@ -154,6 +154,6 @@ export const RoleController = {
       response = handleError(response);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };

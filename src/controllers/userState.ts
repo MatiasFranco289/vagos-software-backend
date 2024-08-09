@@ -14,7 +14,7 @@ export const UserStateController = {
     let newUserState: UserState[] | null = null;
 
     let response: ApiResponse<UserState> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "User State successfully created",
       data: [],
     };
@@ -65,7 +65,7 @@ export const UserStateController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateUserState: async (
     req: Request,
@@ -75,7 +75,7 @@ export const UserStateController = {
     const { new_user_state_name } = req.body;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -103,7 +103,7 @@ export const UserStateController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   deleteUserState: async (
     req: Request,
@@ -112,7 +112,7 @@ export const UserStateController = {
     const { id } = req.params;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
@@ -142,7 +142,7 @@ export const UserStateController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getUserState: async (
     req: Request,
@@ -151,7 +151,7 @@ export const UserStateController = {
     const { id } = req.params;
 
     let response: ApiResponse<UserState | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved User States",
       data: [],
     };
@@ -171,14 +171,14 @@ export const UserStateController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllUserStates: async (
     req: Request,
     res: Response<ApiResponse<UserState | null>>
   ) => {
     let response: ApiResponse<UserState | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved All User States",
       data: [],
     };
@@ -193,6 +193,6 @@ export const UserStateController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };

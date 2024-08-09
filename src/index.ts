@@ -12,6 +12,7 @@ import userStateRouter from "./routes/userState";
 import userRouter from "./routes/user";
 import projectRouter from "./routes/project";
 import blogRouter from "./routes/blog";
+import { transformKeysToSnakeCase } from "./middlewares/snakeCaseMiddleware";
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use("/api", apiRouter);
+
+apiRouter.use(transformKeysToSnakeCase);
 
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/role", roleRouter);

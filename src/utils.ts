@@ -219,14 +219,14 @@ export const getErrorMessages = (error) => {
  *This function returns a json value corresponding with the error that is passed to it
  *
  * @param error - The error obtained with a try catch
- * @returns response - A json value that contains 'statusCode' and 'message'
+ * @returns response - A json value that contains 'status_code' and 'message'
  */
 export const handleError = (error) => {
   console.log(error);
 
   //500 internal server error
   let response: ApiResponse<null> = {
-    statusCode: STATUS_CODE.internalServerError,
+    status_code: STATUS_CODE.internalServerError,
     message: "Internal Server Error",
     data: [],
   };
@@ -234,13 +234,13 @@ export const handleError = (error) => {
   //409 conflict
   if (error.errors && error.errors[0].type === "unique violation") {
     response.message = error.errors[0].value + " already exists";
-    response.statusCode = STATUS_CODE.conflict;
+    response.status_code = STATUS_CODE.conflict;
   }
 
   //404 not found
   if (error.message && error.message === "Not Found") {
     response.message = "Not Found";
-    response.statusCode = STATUS_CODE.notFound;
+    response.status_code = STATUS_CODE.notFound;
   }
 
   return response;

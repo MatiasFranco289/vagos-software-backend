@@ -22,7 +22,7 @@ export const UserController = {
     const { profile_picture } = req.body;
 
     let response: ApiResponse<User | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "User successfully created",
       data: [],
     };
@@ -42,7 +42,7 @@ export const UserController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateUser: async (
     req: Request,
@@ -74,7 +74,7 @@ export const UserController = {
     ];
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully updated 1 user", //Only 1 user can be updated at a time
       data: [],
     };
@@ -98,7 +98,7 @@ export const UserController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 
   /*
@@ -136,7 +136,7 @@ export const UserController = {
     const { id } = req.params;
 
     let response: ApiResponse<User | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully retrieved user",
       data: [],
     };
@@ -154,7 +154,7 @@ export const UserController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllUsers: async (
     req: Request,
@@ -170,7 +170,7 @@ export const UserController = {
     };
 
     let response: ApiResponse<User | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully retrieved users",
       data: [],
     };
@@ -202,6 +202,6 @@ export const UserController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };

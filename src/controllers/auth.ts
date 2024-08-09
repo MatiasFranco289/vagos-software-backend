@@ -21,7 +21,7 @@ export const AuthController = {
     const statusCode: number = 200;
 
     const response: ApiResponse<MockedUser> = {
-      statusCode: statusCode,
+      status_code: statusCode,
       message: "Successful login",
       data: [
         {
@@ -47,7 +47,7 @@ export const AuthController = {
     const statusCode: number = 403;
 
     const response: ApiResponse<null> = {
-      statusCode: statusCode,
+      status_code: statusCode,
       message: "Incorrect credentials",
       data: [],
     };
@@ -61,7 +61,7 @@ export const AuthController = {
     const statusCode: number = 403;
 
     const response: ApiResponse<null> = {
-      statusCode: statusCode,
+      status_code: statusCode,
       message: "Invalid token",
       data: [],
     };

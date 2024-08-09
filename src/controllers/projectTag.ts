@@ -9,28 +9,25 @@ export const ProjectTagController = {
     req: Request,
     res: Response<ApiResponse<ProjectTag | null>>
   ) => {
-    const { project_tag_name } = req.body;
+    const { name } = req.body;
 
     let response: ApiResponse<ProjectTag | null> = {
-      statusCode: STATUS_CODE.created,
-      message: "Project Tags Successfully Created",
+      status_code: STATUS_CODE.created,
+      message: "Project tag successfully created",
       data: [],
     };
 
-    let tags: Array<string> = [];
-    if (Array.isArray(project_tag_name)) tags = project_tag_name;
-    else tags = [project_tag_name];
-
     try {
-      const newTags = await ProjectTag.bulkCreate(
-        tags.map((tagName) => ({ name: tagName }))
-      );
-      response.data = newTags;
+      const newTag = await ProjectTag.create({
+        name: name,
+      });
+
+      response.data = [newTag];
     } catch (err) {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateProjectTag: async (
     req: Request,
@@ -40,7 +37,7 @@ export const ProjectTagController = {
     const { new_project_tag_name } = req.body;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -64,7 +61,7 @@ export const ProjectTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   deleteProjectTags: async (
     req: Request,
@@ -73,7 +70,7 @@ export const ProjectTagController = {
     const { id } = req.params;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
@@ -96,7 +93,7 @@ export const ProjectTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getProjectTag: async (
     req: Request,
@@ -105,7 +102,7 @@ export const ProjectTagController = {
     const { id } = req.params;
 
     let response: ApiResponse<ProjectTag | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved Tags",
       data: [],
     };
@@ -126,25 +123,24 @@ export const ProjectTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllProjectTags: async (
-    req: Request,
+    _req: Request,
     res: Response<ApiResponse<ProjectTag>>
   ) => {
     let response: ApiResponse<ProjectTag> = {
-      statusCode: STATUS_CODE.ok,
-      message: "Successfully Retrieved All Project Tags",
+      status_code: STATUS_CODE.ok,
+      message: "Successfully retrieved all project tags",
       data: [],
     };
 
     try {
       const tags = await ProjectTag.findAll();
-      checkIfNotFound(tags);
       response.data = tags;
     } catch (err) {
       response = handleError(err);
     }
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };

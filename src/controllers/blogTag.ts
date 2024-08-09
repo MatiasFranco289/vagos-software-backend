@@ -18,7 +18,7 @@ export const BlogTagController = {
     const { blog_tag_name } = req.body;
 
     let response: ApiResponse<BlogTag | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Blog Tags Successfully Created",
       data: [],
     };
@@ -36,7 +36,7 @@ export const BlogTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateBlogTag: async (
     req: Request,
@@ -46,7 +46,7 @@ export const BlogTagController = {
     const { new_blog_tag_name } = req.body;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Successfully Updated ",
       data: [],
     };
@@ -70,7 +70,7 @@ export const BlogTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   deleteBlogTag: async (
     req: Request,
@@ -79,7 +79,7 @@ export const BlogTagController = {
     const { id } = req.params;
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Deleted ",
       data: [],
     };
@@ -102,7 +102,7 @@ export const BlogTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getBlogTag: async (
     req: Request,
@@ -111,7 +111,7 @@ export const BlogTagController = {
     const { id } = req.params;
 
     let response: ApiResponse<BlogTag | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved Blog Tags",
       data: [],
     };
@@ -130,14 +130,14 @@ export const BlogTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllBlogTags: async (
     req: Request,
     res: Response<ApiResponse<BlogTag | null>>
   ) => {
     let response: ApiResponse<BlogTag> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully Retrieved All Blog Tags",
       data: [],
     };
@@ -150,6 +150,6 @@ export const BlogTagController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };

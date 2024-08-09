@@ -3,12 +3,11 @@ import { validateResult } from "./../middlewares/validateMiddleware";
 import { isStringOrArrayOfStrings, isCsvNumbers } from "../utils";
 
 export const projectStateCreateValidation = [
-  body("project_state_name")
+  body("name")
     .exists()
-    .withMessage("project_state_name must be provided")
-    .custom((value) => {
-      return isStringOrArrayOfStrings(value, "project_state_name");
-    }),
+    .withMessage("name must be provided")
+    .notEmpty()
+    .withMessage("name cannot be empty"),
   (req, res, next) => {
     validateResult(req, res, next);
   },

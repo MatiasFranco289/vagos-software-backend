@@ -25,7 +25,7 @@ export const ProjectController = {
     const { project_content } = req.body;
 
     let response: ApiResponse<Project | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Project successfully created",
       data: [],
     };
@@ -44,7 +44,7 @@ export const ProjectController = {
     } catch (err) {
       response = handleError(err);
     }
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateProject: async (
     req: Request,
@@ -64,7 +64,7 @@ export const ProjectController = {
     };
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Project successfully updated",
       data: [],
     };
@@ -83,7 +83,7 @@ export const ProjectController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getProject: async (
     req: Request,
@@ -92,7 +92,7 @@ export const ProjectController = {
     const { id } = req.params;
 
     let response: ApiResponse<Project | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully retrieved Project",
       data: [],
     };
@@ -108,7 +108,7 @@ export const ProjectController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllProjects: async (
     req: Request,
@@ -124,7 +124,7 @@ export const ProjectController = {
     };
 
     let response: ApiResponse<Project | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully retrieved projects",
       data: [],
     };
@@ -156,6 +156,6 @@ export const ProjectController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };

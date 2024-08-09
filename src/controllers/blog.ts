@@ -19,7 +19,7 @@ export const BlogController = {
     const { blog_content } = req.body;
 
     let response: ApiResponse<Blog | null> = {
-      statusCode: STATUS_CODE.created,
+      status_code: STATUS_CODE.created,
       message: "Blog successfully created",
       data: [],
     };
@@ -36,7 +36,7 @@ export const BlogController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   updateBlog: async (
     req: Request,
@@ -53,7 +53,7 @@ export const BlogController = {
     };
 
     let response: ApiResponse<number | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully updated blog",
       data: [],
     };
@@ -72,13 +72,13 @@ export const BlogController = {
       response = handleError(response);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getBlog: async (req: Request, res: Response<ApiResponse<Blog | null>>) => {
     const { id } = req.params;
 
     let response: ApiResponse<Blog | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully retrieved Blog",
       data: [],
     };
@@ -94,7 +94,7 @@ export const BlogController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
   getAllBlogs: async (
     req: Request,
@@ -110,7 +110,7 @@ export const BlogController = {
     };
 
     let response: ApiResponse<Blog | null> = {
-      statusCode: STATUS_CODE.ok,
+      status_code: STATUS_CODE.ok,
       message: "Successfully retrieved blogs",
       data: [],
     };
@@ -142,6 +142,6 @@ export const BlogController = {
       response = handleError(err);
     }
 
-    res.status(response.statusCode).json(response);
+    res.status(response.status_code).json(response);
   },
 };
