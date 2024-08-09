@@ -100,6 +100,7 @@ export const UserController = {
 
     res.status(response.statusCode).json(response);
   },
+
   /*
   deleteUser: async (
     req: Request,

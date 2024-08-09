@@ -150,7 +150,6 @@ export const hasUnwantedKeys = (allowedKeys: Array<string>, jsonValue) => {
 
   return false;
 };
-
 /**
  * Replaces the keys of a JSON object based on a provided mapping of old keys to new keys.
  *
