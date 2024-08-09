@@ -5,6 +5,8 @@ import Comment from "./Comment";
 import Project from "./Project";
 import ProjectState from "./ProjectState";
 import ProjectTag from "./ProjectTag";
+import Resource from "./Resource";
+import ResourceType from "./ResourceType";
 import Role from "./Role";
 import User from "./User";
 import UserState from "./UserState";
@@ -90,6 +92,18 @@ const createAssociations = async () => {
   User.belongsTo(UserState, {
     foreignKey: "state_id",
   });
+
+  //Resource N <--- 1 ResourceType
+  ResourceType.hasMany(Resource, {
+    foreignKey: "resource_type_id",
+  });
+  Resource.belongsTo(ResourceType, {
+    foreignKey: "resource_type_id",
+  });
+
+  //Project N <---> N Resource
+  Project.belongsToMany(Resource, { through: "project_to_resource" });
+  Resource.belongsToMany(Project, { through: "project_to_resource" });
 };
 
 export default createAssociations;
