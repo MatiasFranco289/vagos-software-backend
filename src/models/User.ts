@@ -22,18 +22,20 @@ User.init(
     },
     roleId: {
       type: DataTypes.INTEGER,
-      field: 'role_id',
+      allowNull: false,
+      field: "role_id",
       references: {
         model: Role,
-        key: 'id',
-      }
+        key: "id",
+      },
     },
     stateId: {
       type: DataTypes.INTEGER,
-      field: 'state_id',
+      allowNull: false,
+      field: "state_id",
       references: {
         model: UserState,
-        key: 'id',
+        key: "id",
       },
     },
     username: {
@@ -52,7 +54,7 @@ User.init(
     },
     profilePicture: {
       type: DataTypes.STRING,
-    }
+    },
   },
   {
     sequelize,
