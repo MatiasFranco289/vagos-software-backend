@@ -1,8 +1,9 @@
+// TODO: Create login endpoint
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
-
+import startServer from "./config/server";
 dotenv.config();
 
 const app = express();
@@ -18,6 +19,6 @@ app.use("/api", apiRouter);
 
 apiRouter.use("/auth", authRouter);
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
-});
+startServer();
+
+export default app;

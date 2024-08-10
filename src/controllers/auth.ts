@@ -21,7 +21,7 @@ export const AuthController = {
     const statusCode: number = 200;
 
     const response: ApiResponse<MockedUser> = {
-      statusCode: statusCode,
+      status_code: statusCode,
       message: "Successful login",
       data: [
         {
