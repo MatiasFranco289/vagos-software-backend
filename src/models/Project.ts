@@ -1,13 +1,26 @@
-import { DataTypes, Model } from "sequelize";
+import {
+  Association,
+  DataTypes,
+  HasMany,
+  HasManyAddAssociationMixin,
+  Model,
+} from "sequelize";
 import sequelize from "../config/databaseConnection";
 import ProjectState from "./ProjectState";
 import User from "./User";
-import { allowedNodeEnvironmentFlags } from "process";
+import Resource from "./Resource";
+import ProjectTag from "./ProjectTag";
 
 class Project extends Model {
   declare id: number;
   declare stateId: number;
   declare creatorId: number;
+  declare addResource: HasManyAddAssociationMixin<Resource, number>;
+  declare addProjectTag: HasManyAddAssociationMixin<ProjectTag, number>;
+  declare static associations: {
+    resource: Association<Project, Resource>;
+    tag: Association<Project, ProjectTag>;
+  };
   startDate: Date;
   endDate: Date;
   image: string;

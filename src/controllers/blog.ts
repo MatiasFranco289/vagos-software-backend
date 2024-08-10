@@ -69,7 +69,7 @@ export const BlogController = {
       checkIfNotFound(updatedBlogs[0]);
       response.data = [updatedBlogs[0]];
     } catch (err) {
-      response = handleError(response);
+      response = handleError(err);
     }
 
     res.status(response.statusCode).json(response);

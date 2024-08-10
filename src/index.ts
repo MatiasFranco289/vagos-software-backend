@@ -13,6 +13,7 @@ import userRouter from "./routes/user";
 import projectRouter from "./routes/project";
 import blogRouter from "./routes/blog";
 import resourceTypeRouter from "./routes/resourceType";
+import resourceRouter from "./routes/resource";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ apiRouter.use("/project-state", projectStateRouter);
 apiRouter.use("/project", projectRouter);
 apiRouter.use("/blog-tag", blogTagRouter);
 apiRouter.use("/blog", blogRouter);
+apiRouter.use("/resource", resourceRouter);
 apiRouter.use("/resource-type", resourceTypeRouter);
 
 // If the environment is dev or prod server is started here

@@ -1,6 +1,5 @@
 import { ApiResponse } from "../interfaces";
 import { Request, Response } from "express";
-import ProjectTag from "../models/ProjectTag";
 import {
   checkIfNotFound,
   getArrayFromCSV,
@@ -95,7 +94,7 @@ export const BlogTagController = {
       checkIfNotFound(amountOfDeletedTags);
       response.message +=
         amountOfDeletedTags +
-        " Project Tag" +
+        " Blog Tag" +
         (amountOfDeletedTags != 1 ? "s" : "");
       response.data = [amountOfDeletedTags];
     } catch (err) {

@@ -1,8 +1,16 @@
-import { DataTypes, Model } from "sequelize";
+import {
+  Association,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  Model,
+} from "sequelize";
 import sequelize from "../config/databaseConnection";
+import Project from "./Project";
 
 class ProjectTag extends Model {
   declare id: number;
+  declare addProject: HasManyAddAssociationMixin<Project, number>;
+  declare static associations: { bs: Association<ProjectTag, Project> };
   name: string;
 }
 

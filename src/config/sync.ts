@@ -11,6 +11,8 @@ import Blog from "../models/Blog";
 import BlogTag from "../models/BlogTag";
 import Comment from "../models/Comment";
 import createAssociations from "../models/associations";
+import Resource from "../models/Resource";
+import ResourceType from "../models/ResourceType";
 
 const models = [
   User,
@@ -22,6 +24,8 @@ const models = [
   Blog,
   BlogTag,
   Comment,
+  Resource,
+  ResourceType,
 ];
 
 const syncDatabase = async () => {

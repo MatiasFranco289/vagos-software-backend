@@ -1,10 +1,18 @@
-import { DataTypes, Model } from "sequelize";
+import {
+  Association,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  Model,
+} from "sequelize";
 import sequelize from "../config/databaseConnection";
 import ResourceType from "./ResourceType";
+import Project from "./Project";
 
 class Resource extends Model {
   declare id: number;
   declare resourceTypeId: number;
+  declare addProject: HasManyAddAssociationMixin<Project, number>;
+  declare static associations: { bs: Association<Resource, Project> };
   url: string;
 }
 

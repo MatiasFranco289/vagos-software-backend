@@ -270,13 +270,13 @@
 			"name": "Project",
 			"item": [
 				{
-					"name": "get all users with all query params Copy",
+					"name": "post project",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"state_id\": 2,\r\n    \"creator_id\": 1,\r\n    \"project_name\": \"asdasdadasdasd\",\r\n    \"project_content\": \"zxczxczxczxczxczx\"\r\n}",
+							"raw": "{\r\n    \"state_id\": 2,\r\n    \"creator_id\": 1,\r\n    \"project_name\": \"zxcasqwe\",\r\n    \"project_content\": \"zxczxczxczxczxczx\",\r\n    \"resource_id\": [3,4,5,7],\r\n    \"tag_id\": [1,5]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,7 +284,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/project",
+							"raw": "http://localhost:5000/api/project/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -292,7 +292,8 @@
 							"port": "5000",
 							"path": [
 								"api",
-								"project"
+								"project",
+								"1"
 							]
 						}
 					},
@@ -412,6 +413,336 @@
 							"path": [
 								"api",
 								"blog"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resource Type",
+			"item": [
+				{
+					"name": "Post Resource Types",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"resource_type_name\": [\"image\", \"gif\", \"video\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Resource Type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_resource_type_name\": \"picture\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Soft Delete Resource Type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"is_active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Resource Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Many Resource Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type/1,3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type",
+								"1,3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Resource Types (no filters)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resource",
+			"item": [
+				{
+					"name": "Post Resource",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"resource_type_id\": 1,\r\n    \"resource_url\": \"example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/resource",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Resource",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_resource_type_id\": 2,\r\n    \"new_resource_url\": \"example.org\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/resource/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hard Delete Resource",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/resource/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Resource",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/resource/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Many Resources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/resource-type/1,3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource-type",
+								"1,3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Resources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/resource?offset=1&limit=10&order_by=DATE_ASC&resource_type_id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "order_by",
+									"value": "DATE_ASC"
+								},
+								{
+									"key": "resource_type_id",
+									"value": "1"
+								}
 							]
 						}
 					},

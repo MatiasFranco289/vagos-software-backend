@@ -10,6 +10,8 @@ import {
   replaceJSONkeys,
 } from "../utils";
 import { OrderItem } from "sequelize";
+import Resource from "../models/Resource";
+import ProjectTag from "../models/ProjectTag";
 
 export const ProjectController = {
   createProject: async (
@@ -18,6 +20,8 @@ export const ProjectController = {
   ) => {
     const { state_id } = req.body;
     const { creator_id } = req.body;
+    const { resource_id } = req.body;
+    const { tag_id } = req.body;
     const { project_start_date } = req.body;
     const { project_end_date } = req.body;
     const { project_name } = req.body;
@@ -30,6 +34,14 @@ export const ProjectController = {
       data: [],
     };
 
+    let resourcesId: Array<string>;
+    if (Array.isArray(resource_id)) resourcesId = resource_id;
+    else resourcesId = [resource_id];
+
+    let tagsId: Array<string>;
+    if (Array.isArray(tag_id)) tagsId = tag_id;
+    else tagsId = [tag_id];
+
     try {
       const newProject = await Project.create({
         stateId: state_id,
@@ -40,6 +52,48 @@ export const ProjectController = {
         image: project_image,
         content: project_content,
       });
+
+      const resources = await Resource.findAll({
+        where: {
+          id: resourcesId,
+        },
+      });
+
+      let promiseCreateAssociationResource = [];
+
+      resources.forEach((resource) => {
+        let newPromise = new Promise((resolve, reject) => {
+          newProject
+            .addResource(resource)
+            .then((response) => {
+              resolve(response);
+            })
+            .catch((err) => reject(err));
+        });
+        promiseCreateAssociationResource.push(newPromise);
+      });
+      await Promise.all(promiseCreateAssociationResource);
+
+      const tags = await ProjectTag.findAll({
+        where: {
+          id: tagsId,
+        },
+      });
+
+      let promiseCreateAssociationTags = [];
+
+      tags.forEach((tag) => {
+        let newPromise = new Promise((resolve, reject) => {
+          newProject
+            .addProjectTag(tag)
+            .then((response) => {
+              resolve(response);
+            })
+            .catch((err) => reject(err));
+        });
+        promiseCreateAssociationTags.push(newPromise);
+      });
+
       response.data = [newProject];
     } catch (err) {
       response = handleError(err);
@@ -101,6 +155,7 @@ export const ProjectController = {
       const idToFind: Array<string> = getArrayFromCSV(id);
       const projectsInTable = await Project.findAll({
         where: { id: idToFind },
+        include: [Resource, ProjectTag],
       });
       checkIfNotFound(projectsInTable);
       response.data = projectsInTable;

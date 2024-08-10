@@ -7,6 +7,8 @@ import { ORDER_BY } from "../constants";
 const allowedKeys: Array<string> = [
   "state_id",
   "creator_id",
+  "resource_id",
+  "tag_id",
   "project_name",
   "project_image",
   "project_content",
