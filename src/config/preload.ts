@@ -18,7 +18,7 @@ export default async function preloadData() {
     console.log("Entities preloaded successfully.");
   } else {
     console.log(
-      "Production environment detected. Skipping entities preloading."
+      "Non development environment detected. Skipping entities preloading."
     );
   }
 }

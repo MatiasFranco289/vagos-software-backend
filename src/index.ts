@@ -5,11 +5,9 @@ import authRouter from "./routes/auth";
 import startServer from "./config/server";
 import swaggerSetup from "./config/swagger";
 import bodyKeysToSnakeCase from "./middlewares/bodyToSnakeCaseMiddleware";
+import { TESTING } from "./constants";
 
 dotenv.config();
-
-// TODO: documentar en readme
-// TODO: agregar testing
 const app = express();
 const apiRouter = express.Router();
 const corsOptions = {
@@ -28,6 +26,8 @@ swaggerSetup(apiRouter);
 
 apiRouter.use("/auth", authRouter);
 
-startServer();
+if (process.env.NODE_ENV !== TESTING) {
+  startServer();
+}
 
 export default app;

@@ -2,7 +2,7 @@ import syncDatabase from "./sync";
 import createAssociations from "./associations";
 import preloadData from "./preload";
 import app from "../../src/index";
-import http from "http";
+import { Server } from "http";
 
 export default async function startServer() {
   const domain = process.env.API_DOMAIN;
@@ -12,7 +12,7 @@ export default async function startServer() {
   await createAssociations();
   await preloadData();
 
-  return new Promise<http.Server>((resolve, reject) => {
+  return new Promise<Server>((resolve, reject) => {
     const server = app.listen(port, () => {
       console.log(`Server running at ${domain}:${port}/`);
       resolve(server);

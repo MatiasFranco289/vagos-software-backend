@@ -3,7 +3,7 @@
 import sequelize from "./dbConnection";
 import User from "../models/User";
 import Role from "../models/Role";
-import { DEVELOPMENT } from "../constants";
+import { DEVELOPMENT, PRODUCTION } from "../constants";
 
 const models = [User, Role];
 
@@ -17,8 +17,8 @@ const syncDatabase = async () => {
     });
 
     // If this parameter is TRUE all tables will be destroyed and recreated during initialization.
-    // This parameter is TRUE if you are in production
-    await sequelize.sync({ force: process.env.NODE_ENV === DEVELOPMENT });
+    // This parameter is TRUE if you are not in production
+    await sequelize.sync({ force: process.env.NODE_ENV !== PRODUCTION });
     console.log("All models were synchronized successfully.");
   } catch (err) {
     console.error(
