@@ -1,48 +1,89 @@
-import { ApiResponse } from "../interfaces";
+import { ApiResponse, UserAtributes } from "../interfaces";
 import { Request, Response } from "express";
-
-interface MockedRoles {
-  id: number;
-  rolename: "USER" | "ADMIN";
-}
-
-interface MockedUser {
-  id: number;
-  username: string;
-  roles: Array<MockedRoles>;
-}
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-const COOKIE_MAX_AGE = parseInt(process.env.COOKIE_MAX_AGE!) || 1000 * 60 * 60;
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+import { comparePassword } from "../utils";
+import {
+  PRODUCTION,
+  STATUS_CODE_INTERNAL_SERVER_ERROR,
+  STATUS_CODE_NOT_FOUND,
+  STATUS_CODE_OK,
+  STATUS_CODE_UNAUTHORIZED,
+} from "../constants";
+import Role from "../models/Role";
 
 export const AuthController = {
-  login: async (req: Request, res: Response<ApiResponse<MockedUser>>) => {
-    const statusCode: number = 200;
+  login: async (
+    req: Request,
+    res: Response<ApiResponse<UserAtributes | null>>
+  ) => {
+    const { username, password }: { username: string; password: string } =
+      req.body;
 
-    const response: ApiResponse<MockedUser> = {
-      status_code: statusCode,
-      message: "Successful login",
-      data: [
-        {
-          id: 1,
-          username: "VagoDev1",
-          roles: [
-            {
-              id: 1,
-              rolename: "ADMIN",
-            },
-          ],
-        },
-      ],
+    var response: ApiResponse<UserAtributes | null> = {
+      status_code: STATUS_CODE_NOT_FOUND,
+      message: "User not found.",
+      data: [],
     };
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      sameSite: "strict",
-      maxAge: COOKIE_MAX_AGE,
-    });
+    try {
+      const user = await User.findOne({
+        where: { username },
+        include: { model: Role, as: "role" },
+      });
 
-    res.status(statusCode).json(response);
+      if (!user) {
+        return res.status(response.status_code).json(response);
+      }
+
+      const isPasswordValid = await comparePassword(
+        password,
+        user.dataValues.password
+      );
+
+      if (!isPasswordValid) {
+        response = {
+          ...response,
+          status_code: STATUS_CODE_UNAUTHORIZED,
+          message: "Invalid password.",
+        };
+
+        return res.status(response.status_code).json(response);
+      }
+
+      const token = jwt.sign(
+        user.dataValues,
+        process.env.SECRET || "vgs_secret",
+        {
+          expiresIn: "24h",
+        }
+      );
+
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === PRODUCTION,
+      });
+
+      user.set("password", "******");
+
+      response = {
+        ...response,
+        status_code: STATUS_CODE_OK,
+        message: "Login successful.",
+        data: [user],
+      };
+
+      return res.status(response.status_code).json(response);
+    } catch (err) {
+      response = {
+        ...response,
+        status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
+        message: "An unexpected error occurred. Please try again later.",
+      };
+
+      console.error(err);
+
+      res.status(response.status_code).json(response);
+    }
   },
 };

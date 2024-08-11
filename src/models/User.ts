@@ -16,7 +16,7 @@ class User
   public roleId!: ForeignKey<Role["id"]>;
 
   public readonly createdAt!: Date;
-  public readonly updateAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 User.init(
