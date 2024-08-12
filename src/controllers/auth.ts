@@ -22,7 +22,7 @@ export const TOKEN_DURATION = "24h";
 export const SECRET_PASSWORD = "******";
 export const TOKEN_NAME = "access_token";
 
-export const AuthController = {
+export const authController = {
   login: async (
     req: Request,
     res: Response<ApiResponse<UserAtributes | null>>
