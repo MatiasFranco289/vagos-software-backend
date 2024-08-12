@@ -72,6 +72,7 @@ export const authController = {
       res.cookie(TOKEN_NAME, token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === PRODUCTION,
+        sameSite: "strict",
       });
 
       user.set("password", SECRET_PASSWORD);
@@ -104,7 +105,11 @@ export const authController = {
     };
 
     try {
-      res.clearCookie(TOKEN_NAME);
+      res.clearCookie(TOKEN_NAME, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === PRODUCTION,
+        sameSite: "strict",
+      });
     } catch (err) {
       response.status_code = STATUS_CODE_INTERNAL_SERVER_ERROR;
       response.message = INTERNAL_SERVER_ERROR_MESSAGE;
