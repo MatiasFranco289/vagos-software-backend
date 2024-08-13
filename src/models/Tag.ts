@@ -1,12 +1,12 @@
 import { DataTypes, Model, Optional } from "sequelize";
+import { TagAttributes } from "../interfaces";
 import sequelize from "../config/dbConnection";
-import { RoleAttributes } from "../interfaces";
 
-interface RoleCreationAttributes extends Optional<RoleAttributes, "id"> {}
+interface TagCreationAttributes extends Optional<TagAttributes, "id"> {}
 
-class Role
-  extends Model<RoleAttributes, RoleCreationAttributes>
-  implements RoleAttributes
+class Tag
+  extends Model<TagAttributes, TagCreationAttributes>
+  implements TagAttributes
 {
   public id!: number;
   public name!: string;
@@ -15,7 +15,7 @@ class Role
   public readonly updatedAt!: Date;
 }
 
-Role.init(
+Tag.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -28,11 +28,7 @@ Role.init(
       unique: true,
     },
   },
-  {
-    sequelize,
-    tableName: "roles",
-    underscored: true,
-  }
+  { sequelize, tableName: "tags", underscored: true }
 );
 
-export default Role;
+export default Tag;

@@ -1,12 +1,13 @@
 import { DataTypes, Model, Optional } from "sequelize";
+import { UserStatusAttributes } from "../interfaces";
 import sequelize from "../config/dbConnection";
-import { RoleAttributes } from "../interfaces";
 
-interface RoleCreationAttributes extends Optional<RoleAttributes, "id"> {}
+interface UserStatusCreationAttributes
+  extends Optional<UserStatusAttributes, "id"> {}
 
-class Role
-  extends Model<RoleAttributes, RoleCreationAttributes>
-  implements RoleAttributes
+class UserStatus
+  extends Model<UserStatusAttributes, UserStatusCreationAttributes>
+  implements UserStatusAttributes
 {
   public id!: number;
   public name!: string;
@@ -15,7 +16,7 @@ class Role
   public readonly updatedAt!: Date;
 }
 
-Role.init(
+UserStatus.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -30,9 +31,9 @@ Role.init(
   },
   {
     sequelize,
-    tableName: "roles",
+    tableName: "user_status",
     underscored: true,
   }
 );
 
-export default Role;
+export default UserStatus;

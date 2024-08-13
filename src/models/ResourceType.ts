@@ -1,12 +1,13 @@
 import { DataTypes, Model, Optional } from "sequelize";
+import { ResourceTypeAttributes } from "../interfaces";
 import sequelize from "../config/dbConnection";
-import { RoleAttributes } from "../interfaces";
 
-interface RoleCreationAttributes extends Optional<RoleAttributes, "id"> {}
+interface ResourceTypeCreationAttributes
+  extends Optional<ResourceTypeAttributes, "id"> {}
 
-class Role
-  extends Model<RoleAttributes, RoleCreationAttributes>
-  implements RoleAttributes
+class ResourceType
+  extends Model<ResourceTypeAttributes, ResourceTypeCreationAttributes>
+  implements ResourceTypeAttributes
 {
   public id!: number;
   public name!: string;
@@ -15,7 +16,7 @@ class Role
   public readonly updatedAt!: Date;
 }
 
-Role.init(
+ResourceType.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -28,11 +29,5 @@ Role.init(
       unique: true,
     },
   },
-  {
-    sequelize,
-    tableName: "roles",
-    underscored: true,
-  }
+  { sequelize, tableName: "resource_types", underscored: true }
 );
-
-export default Role;

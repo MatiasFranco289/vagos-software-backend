@@ -15,4 +15,36 @@ export interface UserAtributes {
   email: string;
   password: string;
   roleId: number;
+  statusId: number;
+}
+
+export interface TagAttributes {
+  id: number;
+  name: string;
+}
+
+export interface UserStatusAttributes {
+  id: number;
+  name: string;
+}
+
+export interface ProjectStatusAttributes {
+  id: number;
+  name: string;
+}
+
+export interface ProjectAttributes {
+  id: number;
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  startDate: string;
+  endDate: string;
+  statusId: number;
+  repositoryUrl: string;
+}
+
+export interface ResourceTypeAttributes {
+  id: number;
+  name: string;
 }

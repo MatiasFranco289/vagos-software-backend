@@ -3,9 +3,14 @@
 import sequelize from "./dbConnection";
 import User from "../models/User";
 import Role from "../models/Role";
-import { DEVELOPMENT, PRODUCTION } from "../constants";
+import Tag from "../models/Tag";
+import Project from "../models/Project";
+import ProjectStatus from "../models/ProjectStatus";
 
-const models = [User, Role];
+import { PRODUCTION } from "../constants";
+import UserStatus from "../models/UserStatus";
+
+const models = [ProjectStatus, UserStatus, Tag, Role, Project, User];
 
 const syncDatabase = async () => {
   try {

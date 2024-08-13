@@ -8,8 +8,8 @@ export default async function startServer() {
   const domain = process.env.API_DOMAIN;
   const port = process.env.API_PORT;
 
-  await syncDatabase();
   await createAssociations();
+  await syncDatabase();
   await preloadData();
 
   return new Promise<Server>((resolve, reject) => {

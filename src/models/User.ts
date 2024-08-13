@@ -2,6 +2,7 @@ import { Model, Optional, DataTypes, ForeignKey } from "sequelize";
 import Role from "./Role";
 import sequelize from "../config/dbConnection";
 import { UserAtributes } from "../interfaces";
+import UserStatus from "./UserStatus";
 
 interface UserCreationAttributes extends Optional<UserAtributes, "id"> {}
 
@@ -14,6 +15,7 @@ class User
   public email!: string;
   public password!: string;
   public roleId!: ForeignKey<Role["id"]>;
+  public statusId!: ForeignKey<UserStatus["id"]>;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -49,10 +51,20 @@ User.init(
         key: "id",
       },
     },
+    statusId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: "status_id",
+      references: {
+        model: UserStatus,
+        key: "id",
+      },
+    },
   },
   {
     sequelize,
     tableName: "users",
+    underscored: true,
   }
 );
 
