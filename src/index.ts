@@ -23,9 +23,9 @@ app.use(express.json());
 
 app.use("/api", apiRouter);
 
-apiRouter.use(bodyKeysToSnakeCase);
-
 swaggerSetup(apiRouter);
+
+apiRouter.use(bodyKeysToSnakeCase);
 
 apiRouter.use("/auth", authRouter);
 
