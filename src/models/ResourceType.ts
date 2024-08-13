@@ -31,3 +31,5 @@ ResourceType.init(
   },
   { sequelize, tableName: "resource_types", underscored: true }
 );
+
+export default ResourceType;

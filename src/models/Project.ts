@@ -17,7 +17,7 @@ class Project
   public statusId: ForeignKey<ProjectStatus["id"]>;
   public startDate!: string;
   public endDate!: string;
-  // TODO: Agregar resources model
+  // TODO: Agregar resources a projects
   // TODO: Como va a ser los del tablero?
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;

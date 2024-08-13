@@ -30,11 +30,11 @@ swaggerSetup(apiRouter);
 apiRouter.use("/auth", authRouter);
 
 // Routes below this point are only for users or admin
-/* apiRouter.use(validateToken([ROLENAME_ADMIN, ROLENAME_USER])); */
+apiRouter.use(validateToken([ROLENAME_ADMIN, ROLENAME_USER]));
 apiRouter.use("/tags", tagRouter);
 
 // Routes below this point are only for admins or admin
-/* apiRouter.use(validateToken([ROLENAME_ADMIN])); */
+apiRouter.use(validateToken([ROLENAME_ADMIN]));
 
 if (process.env.NODE_ENV !== TESTING) {
   startServer();

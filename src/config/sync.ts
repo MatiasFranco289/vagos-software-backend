@@ -6,11 +6,24 @@ import Role from "../models/Role";
 import Tag from "../models/Tag";
 import Project from "../models/Project";
 import ProjectStatus from "../models/ProjectStatus";
+import ResourceType from "../models/ResourceType";
+import Resource from "../models/Resource";
+import Board from "../models/Board";
 
 import { PRODUCTION } from "../constants";
 import UserStatus from "../models/UserStatus";
 
-const models = [ProjectStatus, UserStatus, Tag, Role, Project, User];
+const models = [
+  ProjectStatus,
+  UserStatus,
+  Tag,
+  Role,
+  ResourceType,
+  Resource,
+  Project,
+  Board,
+  User,
+];
 
 const syncDatabase = async () => {
   try {

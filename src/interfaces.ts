@@ -48,3 +48,16 @@ export interface ResourceTypeAttributes {
   id: number;
   name: string;
 }
+
+export interface ResourceAttributes {
+  id: number;
+  url: string;
+  typeId: number;
+  projectId: number;
+}
+
+export interface BoardAttributes {
+  id: number;
+  title: string;
+  projectId: number;
+}
