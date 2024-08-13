@@ -16,9 +16,11 @@ import {
   SUCCESSFUL_LOGOUT_MESSAGE,
   USER_NOT_FOUND_MESSAGE,
 } from "../controllers/auth";
+import UserStatus from "../models/UserStatus";
 
 describe("POST /api/auth/login", () => {
   let adminRole: Role;
+  let activeStatus: UserStatus;
   let encryptedUserPassword: string;
   let user: User;
 
@@ -26,6 +28,11 @@ describe("POST /api/auth/login", () => {
     adminRole = await Role.create({
       id: 1,
       name: "ADMIN",
+    });
+
+    activeStatus = await UserStatus.create({
+      id: 1,
+      name: "ACTIVE",
     });
 
     encryptedUserPassword = await encryptPassword("test");
@@ -36,6 +43,7 @@ describe("POST /api/auth/login", () => {
       email: "test@gmail.com",
       password: encryptedUserPassword,
       roleId: adminRole.id,
+      statusId: activeStatus.id,
     });
   });
 
