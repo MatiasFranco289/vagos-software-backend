@@ -2,6 +2,7 @@ import { DataTypes, ForeignKey, Model, Optional } from "sequelize";
 import { ProjectAttributes } from "../interfaces";
 import ProjectStatus from "./ProjectStatus";
 import sequelize from "../config/dbConnection";
+import User from "./User";
 
 interface ProjectCreationAtributes extends Optional<ProjectAttributes, "id"> {}
 
@@ -17,8 +18,8 @@ class Project
   public statusId: ForeignKey<ProjectStatus["id"]>;
   public startDate!: string;
   public endDate!: string;
-  // TODO: Agregar resources a projects
-  // TODO: Como va a ser los del tablero?
+  public expectedEndDate!: string;
+  public creatorId!: ForeignKey<User["id"]>;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -62,7 +63,17 @@ Project.init(
     },
     endDate: {
       type: DataTypes.DATE,
+    },
+    expectedEndDate: {
+      type: DataTypes.DATE,
+    },
+    creatorId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
     },
   },
   { sequelize, tableName: "projects", underscored: true }

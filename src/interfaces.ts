@@ -33,6 +33,7 @@ export interface ProjectStatusAttributes {
   name: string;
 }
 
+// TODO: Quizas pasar los atributos que son optionales a Type || null ?
 export interface ProjectAttributes {
   id: number;
   title: string;
@@ -40,8 +41,10 @@ export interface ProjectAttributes {
   thumbnailUrl: string;
   startDate: string;
   endDate: string;
+  expectedEndDate: string;
   statusId: number;
   repositoryUrl: string;
+  creatorId: number;
 }
 
 export interface ResourceTypeAttributes {

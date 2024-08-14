@@ -65,4 +65,14 @@ export default async function createAssociations() {
     foreignKey: "project_id",
     as: "board",
   });
+
+  Project.hasOne(User, {
+    foreignKey: "creator_id",
+    as: "creator",
+  });
+
+  User.belongsTo(Project, {
+    foreignKey: "project_id",
+    as: "project",
+  });
 }
