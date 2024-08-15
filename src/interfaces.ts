@@ -1,3 +1,8 @@
+import Board from "./models/Board";
+import Resource from "./models/Resource";
+import Tag from "./models/Tag";
+import User from "./models/User";
+
 export interface ApiResponse<T> {
   status_code: number;
   message: string;
@@ -33,7 +38,6 @@ export interface ProjectStatusAttributes {
   name: string;
 }
 
-// TODO: Quizas pasar los atributos que son optionales a Type || null ?
 export interface ProjectAttributes {
   id: number;
   title: string;
@@ -45,6 +49,10 @@ export interface ProjectAttributes {
   statusId: number;
   repositoryUrl: string;
   creatorId: number;
+  tags?: Array<Tag>;
+  resources?: Array<Resource>;
+  creator?: User;
+  board?: Board;
 }
 
 export interface ResourceTypeAttributes {

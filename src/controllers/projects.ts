@@ -52,7 +52,6 @@ export const projectsController = {
       tags_id,
       creator_id,
     }: ProjectCreationBodyRequest = req.body;
-    let resources: Array<Resource>;
     let response: ApiResponse<null> = {
       status_code: STATUS_CODE_BAD_REQUEST,
       message: CREATOR_NOT_FOUND_MESSAGE,
@@ -106,9 +105,6 @@ export const projectsController = {
 
       response.status_code = STATUS_CODE_CREATED;
       response.message = SUCCESS_PROJECT_CREATION_MESSAGE;
-      // TODO: Ver de usar transactions en los tests
-      // TODO: Agregar documentacion
-      // TODO: Agregar coleccion de postman
     } catch (err) {
       console.error(
         "The following error has ocurred while trying to create a project."
