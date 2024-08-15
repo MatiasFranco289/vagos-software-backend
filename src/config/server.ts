@@ -1,6 +1,5 @@
 import syncDatabase from "./sync";
 import createAssociations from "./associations";
-import preloadData from "./preload";
 import app from "../../src/index";
 import { Server } from "http";
 import { TESTING } from "../constants";
@@ -12,7 +11,8 @@ export default async function startServer() {
   await syncDatabase();
 
   if (process.env.NODE_ENV !== TESTING) {
-    await preloadData();
+    const preloadData = await require("./preload");
+    await preloadData.default();
   } else {
     console.log("Testing environment detected. Skipping entities preloading.");
   }

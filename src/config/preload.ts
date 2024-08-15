@@ -1,7 +1,5 @@
 // This file imports differents arrays of entities following it's corresponding interfaces
 // and preloads it
-import { TESTING } from "../constants";
-
 import roles from "../../resources/preloadedData/roles";
 import users from "../../resources/preloadedData/users";
 import tags from "../../resources/preloadedData/tags";
