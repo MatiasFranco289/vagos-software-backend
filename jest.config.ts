@@ -3,4 +3,5 @@ module.exports = {
   testEnvironment: "node",
   testMatch: ["**/*.test.ts"],
   setupFilesAfterEnv: ["./jest.setup.ts"],
+  /* maxWorkers: 1, */
 };

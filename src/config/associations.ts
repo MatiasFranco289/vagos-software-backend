@@ -40,6 +40,7 @@ export default async function createAssociations() {
 
   Project.belongsToMany(Tag, {
     through: "project_tag",
+    as: "tags",
   });
 
   Tag.belongsToMany(Project, {
@@ -58,11 +59,22 @@ export default async function createAssociations() {
 
   Project.hasOne(Board, {
     foreignKey: "project_id",
-    as: "project",
+    as: "board",
   });
 
   Board.belongsTo(Project, {
     foreignKey: "project_id",
-    as: "board",
+    as: "project",
+  });
+
+  Project.belongsTo(User, {
+    foreignKey: "creatorId",
+    as: "creator",
+  });
+
+  // Un User tiene muchos Projects
+  User.hasMany(Project, {
+    foreignKey: "creatorId",
+    as: "projects",
   });
 }

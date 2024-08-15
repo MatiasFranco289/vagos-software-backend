@@ -1,3 +1,8 @@
+import Board from "./models/Board";
+import Resource from "./models/Resource";
+import Tag from "./models/Tag";
+import User from "./models/User";
+
 export interface ApiResponse<T> {
   status_code: number;
   message: string;
@@ -40,8 +45,14 @@ export interface ProjectAttributes {
   thumbnailUrl: string;
   startDate: string;
   endDate: string;
+  expectedEndDate: string;
   statusId: number;
   repositoryUrl: string;
+  creatorId: number;
+  tags?: Array<Tag>;
+  resources?: Array<Resource>;
+  creator?: User;
+  board?: Board;
 }
 
 export interface ResourceTypeAttributes {

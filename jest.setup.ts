@@ -1,6 +1,5 @@
-// All the operations declared here are executed before run tests
-import startServer from "./src/config/server";
 import sequelize from "./src/config/dbConnection";
+import startServer from "./src/config/server";
 
 let server;
 
@@ -9,9 +8,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  sequelize.close();
-
-  if (server) {
-    server.close();
-  }
+  await server.close();
+  await sequelize.close();
 });

@@ -17,7 +17,7 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: vagos_test_db
+          POSTGRES_DB: vagos_software_test_db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         options: >-
