@@ -15,17 +15,13 @@ import UserStatus from "../models/UserStatus";
 import ProjectStatus from "../models/ProjectStatus";
 
 export default async function preloadData() {
-  if (process.env.NODE_ENV !== TESTING) {
-    console.log("Preloading entities.");
+  console.log("Preloading entities.");
 
-    await Role.bulkCreate(roles);
-    await UserStatus.bulkCreate(userStatus);
-    await User.bulkCreate(await users());
-    await Tag.bulkCreate(tags);
-    await ProjectStatus.bulkCreate(projectStatus);
+  await Role.bulkCreate(roles);
+  await UserStatus.bulkCreate(userStatus);
+  await User.bulkCreate(await users());
+  await Tag.bulkCreate(tags);
+  await ProjectStatus.bulkCreate(projectStatus);
 
-    console.log("Entities preloaded successfully.");
-  } else {
-    console.log("Testing environment detected. Skipping entities preloading.");
-  }
+  console.log("Entities preloaded successfully.");
 }
