@@ -1,11 +1,29 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { ApiResponse } from "../interfaces";
-import { STATUS_CODE_BAD_REQUEST } from "../constants";
+import {
+  INTERNAL_SERVER_ERROR_MESSAGE,
+  STATUS_CODE_BAD_REQUEST,
+  STATUS_CODE_CREATED,
+  STATUS_CODE_INTERNAL_SERVER_ERROR,
+} from "../constants";
+import Tag from "../models/Tag";
+import { Op } from "sequelize";
+import Resource from "../models/Resource";
+import Project from "../models/Project";
+import ProjectStatus from "../models/ProjectStatus";
+import Board from "../models/Board";
 
 export const CREATOR_NOT_FOUND_MESSAGE =
-  "No user was found with the provided id";
-
+  "No user was found with the provided id.";
+export const STATUS_ID_NOT_FOUND_MESSAGE =
+  "No status was found with the provided id.";
+export const TAG_NOT_FOUND_MESSAGE =
+  "Some of the ids delivered do not correspond to an existing tag.";
+export const RESOURCE_NOT_FOUND_MESSAGE =
+  "Some of the ids delivered do not correspond to an existing tag.";
+export const SUCCESS_PROJECT_CREATION_MESSAGE =
+  "The project has been successfully created.";
 // Expected attributes in body object for project creation
 type ProjectCreationBodyRequest = {
   title: string;
@@ -17,7 +35,6 @@ type ProjectCreationBodyRequest = {
   status_id: number;
   repository_url: string;
   tags_id: Array<number>;
-  resources_id?: Array<number>;
   creator_id: number;
 };
 
@@ -33,30 +50,75 @@ export const projectsController = {
       status_id,
       repository_url,
       tags_id,
-      resources_id,
       creator_id,
     }: ProjectCreationBodyRequest = req.body;
-
+    let resources: Array<Resource>;
     let response: ApiResponse<null> = {
       status_code: STATUS_CODE_BAD_REQUEST,
       message: CREATOR_NOT_FOUND_MESSAGE,
       data: [],
     };
-    // TODO: Iterar sobre el array de tags_id verificando si las ids provistas corresponden o no a un tag real, si no retornar un error
-    // TODO: Si resources_id es provisto iterar sobre el array y verificar si el recurso existe o no, si alguno no existe devolver error
-    // TODO: Verificar si el status_id corresponde a un estado valido, sino devolver error
-    // TODO: Verificar si el creator_id corresponde a un usuario valido, sino devolver error
-
+    // Validations
     const creator: User = await User.findByPk(creator_id);
 
     if (!creator) {
       return res.status(response.status_code).json(response);
     }
 
-    return res.status(200).json({
-      status_code: 200,
-      message: "Hola",
-      data: [],
+    const status: ProjectStatus = await ProjectStatus.findByPk(status_id);
+
+    if (!status) {
+      response.message = STATUS_ID_NOT_FOUND_MESSAGE;
+      return res.status(response.status_code).json(response);
+    }
+
+    const tags: Array<Tag> = await Tag.findAll({
+      where: {
+        id: {
+          [Op.in]: tags_id,
+        },
+      },
     });
+
+    if (tags.length !== tags_id.length) {
+      response.message = TAG_NOT_FOUND_MESSAGE;
+      return res.status(response.status_code).json(response);
+    }
+
+    try {
+      const createdProject = await Project.create({
+        title: title,
+        description: description,
+        thumbnailUrl: thumbnail_url,
+        repositoryUrl: repository_url,
+        statusId: status.id,
+        startDate: start_date,
+        endDate: end_date,
+        expectedEndDate: expected_end_date,
+        creatorId: creator.id,
+      });
+
+      createdProject.addTags(tags);
+      Board.create({
+        title: `${title} board`,
+        projectId: createdProject.id,
+      });
+
+      response.status_code = STATUS_CODE_CREATED;
+      response.message = SUCCESS_PROJECT_CREATION_MESSAGE;
+      // TODO: Ver de usar transactions en los tests
+      // TODO: Agregar documentacion
+      // TODO: Agregar coleccion de postman
+    } catch (err) {
+      console.error(
+        "The following error has ocurred while trying to create a project."
+      );
+      console.error(err);
+
+      response.status_code = STATUS_CODE_INTERNAL_SERVER_ERROR;
+      response.message = INTERNAL_SERVER_ERROR_MESSAGE;
+    }
+
+    return res.status(response.status_code).json(response);
   },
 };

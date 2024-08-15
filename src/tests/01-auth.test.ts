@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/index";
+import app from "../index";
 import User from "../models/User";
 import Role from "../models/Role";
 import { encryptPassword } from "../utils";
@@ -17,14 +17,19 @@ import {
   USER_NOT_FOUND_MESSAGE,
 } from "../controllers/auth";
 import UserStatus from "../models/UserStatus";
+import startServer from "../config/server";
+import sequelize from "../config/dbConnection";
 
 describe("POST /api/auth/login", () => {
   let adminRole: Role;
   let activeStatus: UserStatus;
   let encryptedUserPassword: string;
   let user: User;
+  let server;
 
   beforeAll(async () => {
+    server = await startServer();
+
     adminRole = await Role.create({
       id: 1,
       name: "ADMIN",
@@ -45,6 +50,18 @@ describe("POST /api/auth/login", () => {
       roleId: adminRole.id,
       statusId: activeStatus.id,
     });
+  });
+
+  afterAll(async () => {
+    await User.destroy({ where: {} });
+    await Role.destroy({ where: {} });
+    await UserStatus.destroy({ where: {} });
+    await sequelize.sync({
+      force: true,
+    });
+
+    await server.close();
+    await sequelize.close();
   });
 
   it("Should login successfully", async () => {

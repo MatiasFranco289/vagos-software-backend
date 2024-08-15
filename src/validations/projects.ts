@@ -65,15 +65,6 @@ export const createProjectValidation = [
     })
     .withMessage("all elements in tags_id array should be integers."),
 
-  body("resources_id")
-    .optional()
-    .isArray()
-    .withMessage("resources_id should be an array.")
-    .custom((arr) => {
-      return arr.every(Number.isInteger);
-    })
-    .withMessage("all elements in resources array should be integers."),
-
   body("creator_id")
     .exists()
     .withMessage("creator_id should be provided.")

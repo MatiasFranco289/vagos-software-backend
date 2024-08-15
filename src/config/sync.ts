@@ -14,8 +14,8 @@ import { PRODUCTION } from "../constants";
 import UserStatus from "../models/UserStatus";
 
 const models = [
-  ProjectStatus,
   UserStatus,
+  ProjectStatus,
   Tag,
   Role,
   ResourceType,
