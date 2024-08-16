@@ -3,6 +3,6 @@ import { tagsController } from "../controllers/tags";
 
 const tagRouter = Router();
 
-tagRouter.get("/all", tagsController.getAllTags);
+tagRouter.get("/", tagsController.getAllTags);
 
 export default tagRouter;

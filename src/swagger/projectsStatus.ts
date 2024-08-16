@@ -1,12 +1,12 @@
 /**
  * @swagger
- * /api/projects/tags:
+ * /api/projects/status:
  *   get:
- *     summary: Retrieve all tags
- *     description: Fetches a list of all tags from the database.
+ *     summary: Retrieve all project statuses
+ *     description: Fetches a list of all project statuses from the database.
  *     responses:
  *       200:
- *         description: Successful retrieval of tags
+ *         description: Successful retrieval of project statuses
  *         content:
  *           application/json:
  *             schema:
@@ -17,11 +17,11 @@
  *                   example: 200
  *                 message:
  *                   type: string
- *                   example: Tags retrieved successfully
+ *                   example: Project statuses retrieved successfully
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Tag'
+ *                     $ref: '#/components/schemas/ProjectStatus'
  *       500:
  *         description: Internal server error
  *         content:
@@ -40,11 +40,11 @@
  *                   items:
  *                     type: object
  *     tags:
- *       - Tags
+ *       - Project Statuses
  */
 
 /**
- * @typedef Tag
- * @property {integer} id - The unique identifier for the tag
- * @property {string} name - The name of the tag
+ * @typedef ProjectStatus
+ * @property {integer} id - The unique identifier for the project status
+ * @property {string} name - The name of the project status
  */

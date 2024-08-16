@@ -38,8 +38,8 @@ type ProjectCreationBodyRequest = {
   creator_id: number;
 };
 
-export const projectsController = {
-  createProject: async (req: Request, res: Response) => {
+export const projectsAdminController = {
+  createProject: async (req: Request, res: Response<ApiResponse<null>>) => {
     const {
       title,
       description,

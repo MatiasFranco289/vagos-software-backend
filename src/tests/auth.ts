@@ -17,8 +17,6 @@ import {
   USER_NOT_FOUND_MESSAGE,
 } from "../controllers/auth";
 import UserStatus from "../models/UserStatus";
-import startServer from "../config/server";
-import sequelize from "../config/dbConnection";
 
 export const authTests = () =>
   describe("POST /api/auth/login", () => {

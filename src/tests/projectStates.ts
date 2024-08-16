@@ -4,15 +4,15 @@ import UserStatus from "../models/UserStatus";
 import { encryptPassword } from "../utils";
 import request from "supertest";
 import app from "../../src/index";
-import Tag from "../models/Tag";
-import { STATUS_CODE_OK } from "../constants";
 import { ApiResponse } from "../interfaces";
-import { TAGS_RETRIEVED_SUCCESSFUL_MESSAGE } from "../controllers/tags";
+import { STATUS_CODE_OK } from "../constants";
+import ProjectStatus from "../models/ProjectStatus";
 
-export const tagsTest = () =>
-  describe("GET /api/projects/tags", () => {
+export const projectStatesTest = () =>
+  describe("GET /api/projects/status", () => {
     let adminRole: Role;
     let activeStatus: UserStatus;
+    let encryptedUserPassword: string;
     let user: User;
     let accessToken: string;
 
@@ -27,7 +27,7 @@ export const tagsTest = () =>
         name: "ACTIVE",
       });
 
-      const encryptedUserPassword = await encryptPassword("test");
+      encryptedUserPassword = await encryptPassword("test");
 
       user = await User.create({
         id: 1,
@@ -46,44 +46,35 @@ export const tagsTest = () =>
       const cookies = authResponse.headers["set-cookie"];
       accessToken = cookies[0].split(";")[0];
 
-      await Tag.bulkCreate([
+      await ProjectStatus.bulkCreate([
         {
           id: 1,
-          name: "2D",
+          name: "ACTIVE",
         },
         {
           id: 2,
-          name: "3D",
+          name: "FINISHED",
         },
         {
           id: 3,
-          name: "Metroidvania",
+          name: "PAUSED",
         },
       ]);
     });
 
-    afterAll(async () => {
-      await User.destroy({ where: {} });
-      await Role.destroy({ where: {} });
-      await UserStatus.destroy({ where: {} });
-      await Tag.destroy({ where: {} });
-    });
-
-    it("Should return all created tags", async () => {
+    it("Should return all created project status", async () => {
       const response = await request(app)
-        .get("/api/projects/tags")
+        .get("/api/projects/status")
         .set("Cookie", accessToken);
-
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toEqual(STATUS_CODE_OK);
       expect(bodyResponse.status_code).toEqual(STATUS_CODE_OK);
-      expect(bodyResponse.message).toEqual(TAGS_RETRIEVED_SUCCESSFUL_MESSAGE);
 
       expect(
-        bodyResponse.data.map((tag) => {
-          return tag.name;
+        bodyResponse.data.map((status) => {
+          return status.name;
         })
-      ).toEqual(["2D", "3D", "Metroidvania"]);
+      ).toEqual(["ACTIVE", "FINISHED", "PAUSED"]);
     });
   });
