@@ -10,7 +10,7 @@ import {
   CREATOR_NOT_FOUND_MESSAGE,
   STATUS_ID_NOT_FOUND_MESSAGE,
   TAG_NOT_FOUND_MESSAGE,
-} from "../controllers/projects";
+} from "../controllers/projectsAdmin";
 import Tag from "../models/Tag";
 import Project from "../models/Project";
 import ProjectStatus from "../models/ProjectStatus";
@@ -19,7 +19,7 @@ import ResourceType from "../models/ResourceType";
 import Board from "../models/Board";
 
 export const projectsTests = () =>
-  describe("POST /api/admin/project", () => {
+  describe("POST /api/projects/admin", () => {
     let adminRole: Role;
     let activeStatus: UserStatus;
     let encryptedUserPassword: string;
@@ -88,6 +88,7 @@ export const projectsTests = () =>
       await ResourceType.destroy({ where: {} });
       await Resource.destroy({ where: {} });
       await Project.destroy({ where: {} });
+      await ProjectStatus.destroy({ where: {} });
       await User.destroy({ where: {} });
       await Role.destroy({ where: {} });
       await UserStatus.destroy({ where: {} });
@@ -96,7 +97,7 @@ export const projectsTests = () =>
 
     it("Should return an error if non-existent user id are passed", async () => {
       const response = await request(app)
-        .post("/api/admin/projects")
+        .post("/api/projects/admin")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
@@ -118,7 +119,7 @@ export const projectsTests = () =>
 
     it("Should return an error if non-existent status_id are passed", async () => {
       const response = await request(app)
-        .post("/api/admin/projects")
+        .post("/api/projects/admin")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
@@ -140,7 +141,7 @@ export const projectsTests = () =>
 
     it("Should return an error if non-existent tag_id are passed", async () => {
       const response = await request(app)
-        .post("/api/admin/projects")
+        .post("/api/projects/admin")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
@@ -162,7 +163,7 @@ export const projectsTests = () =>
 
     it("Should successfully create a project and all it's associations if everything is correct.", async () => {
       await request(app)
-        .post("/api/admin/projects")
+        .post("/api/projects/admin")
         .set("Cookie", accessToken)
         .send({
           title: "test project",

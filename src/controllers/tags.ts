@@ -10,7 +10,7 @@ import {
 export const TAGS_RETRIEVED_SUCCESSFUL_MESSAGE = "Tags retrieved successfully.";
 
 export const tagsController = {
-  getAllTags: async (req: Request, res: Response) => {
+  getAllTags: async (req: Request, res: Response<ApiResponse<null | Tag>>) => {
     let response: ApiResponse<null | Tag> = {
       status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
       message: INTERNAL_SERVER_ERROR_MESSAGE,

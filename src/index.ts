@@ -8,7 +8,8 @@ import bodyKeysToSnakeCase from "./middlewares/bodyToSnakeCaseMiddleware";
 import { ROLENAME_ADMIN, ROLENAME_USER, TESTING } from "./constants";
 import { validateToken } from "./middlewares/auth";
 import tagRouter from "./routes/tags";
-import projectsRouter from "./routes/projectsAdmin";
+import projectStates from "./routes/projects";
+import projectsAdminRouter from "./routes/projectsAdmin";
 
 dotenv.config();
 const app = express();
@@ -32,12 +33,13 @@ apiRouter.use("/auth", authRouter);
 
 // Routes below this point are only for users or admin
 apiRouter.use(validateToken([ROLENAME_ADMIN, ROLENAME_USER]));
-apiRouter.use("/tags", tagRouter);
+apiRouter.use("/projects/tags", tagRouter);
+apiRouter.use("/projects/status", projectStates);
 
 // Routes below this point are only for admins or admin
 apiRouter.use(validateToken([ROLENAME_ADMIN]));
 
-apiRouter.use("/admin/projects", projectsRouter);
+apiRouter.use("/projects/admin", projectsAdminRouter);
 
 if (process.env.NODE_ENV !== TESTING) {
   startServer();

@@ -7,27 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "allTags",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5000/api/tags/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"api",
-						"tags",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "login",
 			"request": {
 				"method": "POST",
@@ -88,6 +67,27 @@
 			"response": []
 		},
 		{
+			"name": "allTags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/projects/tags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "create-project",
 			"request": {
 				"method": "POST",
@@ -102,7 +102,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/admin/projects",
+					"raw": "http://localhost:5000/api/projects/admin",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -110,8 +110,29 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"admin",
-						"projects"
+						"projects",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allProjectStatus",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/projects/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects",
+						"status"
 					]
 				}
 			},
