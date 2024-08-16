@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /login:
+ * /api/auth/login:
  *   post:
  *     summary: Authenticate a user and return a token
  *     description: This endpoint allows users to log in by providing their username and password. If successful, it returns a JSON Web Token (JWT) in a cookie and user details in the response. If the login fails, appropriate error messages and status codes are returned.
