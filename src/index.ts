@@ -10,6 +10,7 @@ import { validateToken } from "./middlewares/auth";
 import tagRouter from "./routes/tags";
 import projectStates from "./routes/projects";
 import projectsAdminRouter from "./routes/projectsAdmin";
+import resourcesAdminRouter from "./routes/resourcesAdmin";
 
 dotenv.config();
 const app = express();
@@ -39,7 +40,8 @@ apiRouter.use("/projects/status", projectStates);
 // Routes below this point are only for admins or admin
 apiRouter.use(validateToken([ROLENAME_ADMIN]));
 
-apiRouter.use("/projects/admin", projectsAdminRouter);
+apiRouter.use("/admin/projects", projectsAdminRouter);
+apiRouter.use("/admin/projects/resources", resourcesAdminRouter);
 
 if (process.env.NODE_ENV !== TESTING) {
   startServer();
