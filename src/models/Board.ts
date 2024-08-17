@@ -3,7 +3,8 @@ import sequelize from "../config/dbConnection";
 import { BoardAttributes } from "../interfaces";
 import Project from "./Project";
 
-interface BoardCreationAttributes extends Optional<BoardAttributes, "id"> {}
+export interface BoardCreationAttributes
+  extends Optional<BoardAttributes, "id"> {}
 
 class Board
   extends Model<BoardAttributes, BoardCreationAttributes>

@@ -30,27 +30,6 @@ export const resourcesTest = () =>
     let projectStatus: ProjectStatus;
 
     beforeAll(async () => {
-      adminRole = await Role.create({
-        id: 1,
-        name: "ADMIN",
-      });
-
-      activeStatus = await UserStatus.create({
-        id: 1,
-        name: "ACTIVE",
-      });
-
-      encryptedUserPassword = await encryptPassword("test");
-
-      user = await User.create({
-        id: 1,
-        username: "test",
-        email: "test@gmail.com",
-        password: encryptedUserPassword,
-        roleId: adminRole.id,
-        statusId: activeStatus.id,
-      });
-
       projectStatus = await ProjectStatus.create({
         id: 1,
         name: "ACTIVE",
@@ -73,14 +52,6 @@ export const resourcesTest = () =>
         statusId: 1,
         creatorId: 1,
       });
-
-      const authResponse = await request(app).post("/api/auth/login").send({
-        username: "test",
-        password: "test",
-      });
-
-      const cookies = authResponse.headers["set-cookie"];
-      accessToken = cookies[0].split(";")[0];
     });
 
     afterAll(async () => {
@@ -88,15 +59,12 @@ export const resourcesTest = () =>
       await ResourceType.destroy({ where: {} });
       await Project.destroy({ where: {} });
       await ProjectStatus.destroy({ where: {} });
-      await User.destroy({ where: {} });
-      await Role.destroy({ where: {} });
-      await UserStatus.destroy({ where: {} });
     });
 
     it("Should successfully create a resource.", async () => {
       const response = await request(app)
         .post("/api/admin/projects/resources")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           url: "www.test.com",
           type_id: 1,
@@ -112,7 +80,7 @@ export const resourcesTest = () =>
     it("Should return error if invalid project_id is passed", async () => {
       const response = await request(app)
         .post("/api/admin/projects/resources")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           url: "www.test.com",
           type_id: 1,
@@ -129,7 +97,7 @@ export const resourcesTest = () =>
     it("Should return error if invalid type_id is passed", async () => {
       const response = await request(app)
         .post("/api/admin/projects/resources")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           url: "www.test.com",
           type_id: 3,

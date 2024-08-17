@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { ResourceTypeAttributes } from "../interfaces";
 import sequelize from "../config/dbConnection";
 
-interface ResourceTypeCreationAttributes
+export interface ResourceTypeCreationAttributes
   extends Optional<ResourceTypeAttributes, "id"> {}
 
 class ResourceType

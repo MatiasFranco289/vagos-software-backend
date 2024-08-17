@@ -20,40 +20,6 @@ import UserStatus from "../models/UserStatus";
 
 export const authTests = () =>
   describe("POST /api/auth/login", () => {
-    let adminRole: Role;
-    let activeStatus: UserStatus;
-    let encryptedUserPassword: string;
-    let user: User;
-
-    beforeAll(async () => {
-      adminRole = await Role.create({
-        id: 1,
-        name: "ADMIN",
-      });
-
-      activeStatus = await UserStatus.create({
-        id: 1,
-        name: "ACTIVE",
-      });
-
-      encryptedUserPassword = await encryptPassword("test");
-
-      user = await User.create({
-        id: 1,
-        username: "test",
-        email: "test@gmail.com",
-        password: encryptedUserPassword,
-        roleId: adminRole.id,
-        statusId: activeStatus.id,
-      });
-    });
-
-    afterAll(async () => {
-      await User.destroy({ where: {} });
-      await Role.destroy({ where: {} });
-      await UserStatus.destroy({ where: {} });
-    });
-
     it("Should login successfully", async () => {
       const response = await request(app).post("/api/auth/login").send({
         username: "test",
