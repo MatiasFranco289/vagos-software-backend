@@ -11,7 +11,8 @@ import sequelize from "../config/dbConnection";
 import User from "./User";
 import Tag from "./Tag";
 
-interface ProjectCreationAtributes extends Optional<ProjectAttributes, "id"> {}
+export interface ProjectCreationAtributes
+  extends Optional<ProjectAttributes, "id"> {}
 
 class Project
   extends Model<ProjectAttributes, ProjectCreationAtributes>

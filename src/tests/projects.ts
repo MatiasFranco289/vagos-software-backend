@@ -1,16 +1,13 @@
 import { STATUS_CODE_BAD_REQUEST } from "../constants";
 import app from "../index";
 import { ApiResponse } from "../interfaces";
-import Role from "../models/Role";
 import User from "../models/User";
-import UserStatus from "../models/UserStatus";
-import { encryptPassword } from "../utils";
 import request from "supertest";
 import {
   CREATOR_NOT_FOUND_MESSAGE,
   STATUS_ID_NOT_FOUND_MESSAGE,
   TAG_NOT_FOUND_MESSAGE,
-} from "../controllers/projectsAdmin";
+} from "../controllers/projects";
 import Tag from "../models/Tag";
 import Project from "../models/Project";
 import ProjectStatus from "../models/ProjectStatus";
@@ -20,34 +17,7 @@ import Board from "../models/Board";
 
 export const projectsTests = () =>
   describe("POST /api/admin/projects", () => {
-    let adminRole: Role;
-    let activeStatus: UserStatus;
-    let encryptedUserPassword: string;
-    let creator: User;
-    let accessToken: string;
-
     beforeAll(async () => {
-      adminRole = await Role.create({
-        id: 1,
-        name: "ADMIN",
-      });
-
-      activeStatus = await UserStatus.create({
-        id: 1,
-        name: "ACTIVE",
-      });
-
-      encryptedUserPassword = await encryptPassword("test");
-
-      creator = await User.create({
-        id: 1,
-        username: "test",
-        email: "test@gmail.com",
-        password: encryptedUserPassword,
-        roleId: adminRole.id,
-        statusId: activeStatus.id,
-      });
-
       await Tag.bulkCreate([
         {
           id: 1,
@@ -72,15 +42,6 @@ export const projectsTests = () =>
         id: 1,
         name: "test_resource",
       });
-
-      // I need to authenticate to get access_token before call others endpoints
-      const authResponse = await request(app).post("/api/auth/login").send({
-        username: "test",
-        password: "test",
-      });
-
-      const cookies = authResponse.headers["set-cookie"];
-      accessToken = cookies[0].split(";")[0];
     });
 
     afterAll(async () => {
@@ -88,16 +49,13 @@ export const projectsTests = () =>
       await Resource.destroy({ where: {} });
       await Project.destroy({ where: {} });
       await ProjectStatus.destroy({ where: {} });
-      await User.destroy({ where: {} });
-      await Role.destroy({ where: {} });
-      await UserStatus.destroy({ where: {} });
       await Tag.destroy({ where: {} });
     });
 
     it("Should return an error if non-existent user id are passed", async () => {
       const response = await request(app)
         .post("/api/admin/projects")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           title: "test project",
           description: "test description",
@@ -119,7 +77,7 @@ export const projectsTests = () =>
     it("Should return an error if non-existent status_id are passed", async () => {
       const response = await request(app)
         .post("/api/admin/projects")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           title: "test project",
           description: "test description",
@@ -141,7 +99,7 @@ export const projectsTests = () =>
     it("Should return an error if non-existent tag_id are passed", async () => {
       const response = await request(app)
         .post("/api/admin/projects")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           title: "test project",
           description: "test description",
@@ -163,7 +121,7 @@ export const projectsTests = () =>
     it("Should successfully create a project and all it's associations if everything is correct.", async () => {
       await request(app)
         .post("/api/admin/projects")
-        .set("Cookie", accessToken)
+        .set("Cookie", global.accessToken)
         .send({
           title: "test project",
           description: "test description",

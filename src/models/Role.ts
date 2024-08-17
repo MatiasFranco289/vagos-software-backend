@@ -2,7 +2,8 @@ import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/dbConnection";
 import { RoleAttributes } from "../interfaces";
 
-interface RoleCreationAttributes extends Optional<RoleAttributes, "id"> {}
+export interface RoleCreationAttributes
+  extends Optional<RoleAttributes, "id"> {}
 
 class Role
   extends Model<RoleAttributes, RoleCreationAttributes>

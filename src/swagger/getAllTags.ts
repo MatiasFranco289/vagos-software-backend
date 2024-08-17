@@ -3,10 +3,12 @@
  * /api/projects/tags:
  *   get:
  *     summary: Retrieve all tags
- *     description: Fetches a list of all tags from the database.
+ *     description: This endpoint retrieves all tags stored in the database. If successful, it returns a list of tags. If an error occurs, an appropriate error message and status code are returned.
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Successful retrieval of tags
+ *         description: Tags retrieved successfully. Returns a list of tags.
  *         content:
  *           application/json:
  *             schema:
@@ -17,13 +19,46 @@
  *                   example: 200
  *                 message:
  *                   type: string
- *                   example: Tags retrieved successfully
+ *                   example: "Tags retrieved successfully."
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Tag'
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       name:
+ *                         type: string
+ *                         example: "Technology"
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-08-11T04:17:07.511Z"
+ *                       updated_at:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-08-11T04:17:07.511Z"
+ *       401:
+ *         description: Unauthorized. The provided token is invalid or missing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid token."
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: []
  *       500:
- *         description: Internal server error
+ *         description: Internal server error. An unexpected error occurred while processing the request.
  *         content:
  *           application/json:
  *             schema:
@@ -34,17 +69,12 @@
  *                   example: 500
  *                 message:
  *                   type: string
- *                   example: Internal server error
+ *                   example: "An unexpected error occurred. Please try again later."
  *                 data:
  *                   type: array
  *                   items:
- *                     type: object
+ *                     type: string
+ *                   example: []
  *     tags:
- *       - Tags
- */
-
-/**
- * @typedef Tag
- * @property {integer} id - The unique identifier for the tag
- * @property {string} name - The name of the tag
+ *       - Get all tags
  */

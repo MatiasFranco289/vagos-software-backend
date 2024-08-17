@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { TagAttributes } from "../interfaces";
 import sequelize from "../config/dbConnection";
 
-interface TagCreationAttributes extends Optional<TagAttributes, "id"> {}
+export interface TagCreationAttributes extends Optional<TagAttributes, "id"> {}
 
 class Tag
   extends Model<TagAttributes, TagCreationAttributes>

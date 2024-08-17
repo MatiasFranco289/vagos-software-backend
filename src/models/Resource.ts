@@ -4,7 +4,7 @@ import { ResourceAttributes } from "../interfaces";
 import ResourceType from "./ResourceType";
 import Project from "./Project";
 
-interface ResourceCreationAttributes
+export interface ResourceCreationAttributes
   extends Optional<ResourceAttributes, "id"> {}
 
 class Resource

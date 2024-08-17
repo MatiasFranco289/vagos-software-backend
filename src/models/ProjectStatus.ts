@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { ProjectStatusAttributes } from "../interfaces";
 import sequelize from "../config/dbConnection";
 
-interface ProjectStatusCreationAttributes
+export interface ProjectStatusCreationAttributes
   extends Optional<ProjectStatusAttributes, "id"> {}
 
 class ProjectStatus

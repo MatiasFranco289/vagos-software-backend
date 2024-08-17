@@ -132,4 +132,6 @@
  *                   items:
  *                     type: string
  *                   example: []
+ *     tags:
+ *       - Login
  */

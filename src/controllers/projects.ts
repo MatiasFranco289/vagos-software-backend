@@ -1,12 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { ApiResponse } from "../interfaces";
-import {
-  INTERNAL_SERVER_ERROR_MESSAGE,
-  STATUS_CODE_BAD_REQUEST,
-  STATUS_CODE_CREATED,
-  STATUS_CODE_INTERNAL_SERVER_ERROR,
-} from "../constants";
+import { STATUS_CODE_BAD_REQUEST, STATUS_CODE_CREATED } from "../constants";
 import Tag from "../models/Tag";
 import { Op } from "sequelize";
 import Project from "../models/Project";

@@ -4,7 +4,7 @@ import sequelize from "../config/dbConnection";
 import { UserAtributes } from "../interfaces";
 import UserStatus from "./UserStatus";
 
-interface UserCreationAttributes extends Optional<UserAtributes, "id"> {}
+export interface UserCreationAttributes extends Optional<UserAtributes, "id"> {}
 
 class User
   extends Model<UserAtributes, UserCreationAttributes>

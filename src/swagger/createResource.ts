@@ -2,10 +2,10 @@
  * @swagger
  * /api/admin/projects/resources:
  *   post:
- *     summary: Crea un nuevo recurso.
- *     description: Crea un recurso asociado a un proyecto y a un tipo de recurso específico.
- *     tags:
- *       - Resources
+ *     summary: Create a new resource
+ *     description: This endpoint allows for the creation of a new resource associated with a specific project and resource type. It validates the provided type and project IDs, and if valid, creates the resource.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -15,22 +15,89 @@
  *             properties:
  *               url:
  *                 type: string
- *                 description: La URL del recurso.
- *                 example: "https://example.com/admin/projects/resources"
+ *                 description: The URL of the resource.
+ *                 example: "http://example.com/resource"
  *               type_id:
  *                 type: integer
- *                 description: ID del tipo de recurso.
- *                 example: 1
+ *                 description: The ID of the resource type.
+ *                 example: 2
  *               project_id:
  *                 type: integer
- *                 description: ID del proyecto al que pertenece el recurso.
- *                 example: 123
+ *                 description: The ID of the project the resource is associated with.
+ *                 example: 1
  *     responses:
  *       201:
- *         description: Recurso creado exitosamente.
+ *         description: Resource created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 201
+ *                 message:
+ *                   type: string
+ *                   example: "Resource successfully created."
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: []
  *       400:
- *         description: No se encontró el tipo de recurso o el proyecto.
+ *         description: Bad Request. Could be due to an invalid or missing project or resource type.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "No resource type found."
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: []
+ *       401:
+ *         description: Unauthorized. The provided token is invalid or missing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid token."
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: []
  *       500:
- *         description: Error interno del servidor.
- *
- * */
+ *         description: Internal server error. An unexpected error occurred while processing the request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: []
+ *     tags:
+ *       - Create resource
+ */
