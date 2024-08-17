@@ -9,10 +9,10 @@ import {
 } from "../constants";
 import Tag from "../models/Tag";
 import { Op } from "sequelize";
-import Resource from "../models/Resource";
 import Project from "../models/Project";
 import ProjectStatus from "../models/ProjectStatus";
 import Board from "../models/Board";
+import { handleApiError } from "../utils";
 
 export const CREATOR_NOT_FOUND_MESSAGE =
   "No user was found with the provided id.";
@@ -24,6 +24,9 @@ export const RESOURCE_NOT_FOUND_MESSAGE =
   "Some of the ids delivered do not correspond to an existing tag.";
 export const SUCCESS_PROJECT_CREATION_MESSAGE =
   "The project has been successfully created.";
+const DEFAULT_ERROR_MESSAGE =
+  "The following error has ocurred while trying to create a project.";
+
 // Expected attributes in body object for project creation
 type ProjectCreationBodyRequest = {
   title: string;
@@ -106,13 +109,7 @@ export const projectsAdminController = {
       response.status_code = STATUS_CODE_CREATED;
       response.message = SUCCESS_PROJECT_CREATION_MESSAGE;
     } catch (err) {
-      console.error(
-        "The following error has ocurred while trying to create a project."
-      );
-      console.error(err);
-
-      response.status_code = STATUS_CODE_INTERNAL_SERVER_ERROR;
-      response.message = INTERNAL_SERVER_ERROR_MESSAGE;
+      response = handleApiError(err, DEFAULT_ERROR_MESSAGE);
     }
 
     return res.status(response.status_code).json(response);

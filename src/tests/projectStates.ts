@@ -62,6 +62,13 @@ export const projectStatesTest = () =>
       ]);
     });
 
+    afterAll(async () => {
+      await User.destroy({ where: {} });
+      await Role.destroy({ where: {} });
+      await UserStatus.destroy({ where: {} });
+      await ProjectStatus.destroy({ where: {} });
+    });
+
     it("Should return all created project status", async () => {
       const response = await request(app)
         .get("/api/projects/status")

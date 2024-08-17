@@ -50,7 +50,7 @@
  *           type: integer
  *           description: The ID of the user who created the project.
  *
- * api/projects/admin:
+ * api/admin/projects:
  *   post:
  *     summary: Create a new project
  *     description: Creates a new project with the provided details and its corresponding Board. Returns an error if any of the required IDs (creator_id, status_id, tags_id) are not found.

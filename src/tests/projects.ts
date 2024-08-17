@@ -19,13 +19,12 @@ import ResourceType from "../models/ResourceType";
 import Board from "../models/Board";
 
 export const projectsTests = () =>
-  describe("POST /api/projects/admin", () => {
+  describe("POST /api/admin/projects", () => {
     let adminRole: Role;
     let activeStatus: UserStatus;
     let encryptedUserPassword: string;
     let creator: User;
     let accessToken: string;
-    let projectStatus: ProjectStatus;
 
     beforeAll(async () => {
       adminRole = await Role.create({
@@ -64,7 +63,7 @@ export const projectsTests = () =>
         },
       ]);
 
-      projectStatus = await ProjectStatus.create({
+      await ProjectStatus.create({
         id: 1,
         name: "ACTIVE",
       });
@@ -97,7 +96,7 @@ export const projectsTests = () =>
 
     it("Should return an error if non-existent user id are passed", async () => {
       const response = await request(app)
-        .post("/api/projects/admin")
+        .post("/api/admin/projects")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
@@ -119,7 +118,7 @@ export const projectsTests = () =>
 
     it("Should return an error if non-existent status_id are passed", async () => {
       const response = await request(app)
-        .post("/api/projects/admin")
+        .post("/api/admin/projects")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
@@ -141,7 +140,7 @@ export const projectsTests = () =>
 
     it("Should return an error if non-existent tag_id are passed", async () => {
       const response = await request(app)
-        .post("/api/projects/admin")
+        .post("/api/admin/projects")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
@@ -163,7 +162,7 @@ export const projectsTests = () =>
 
     it("Should successfully create a project and all it's associations if everything is correct.", async () => {
       await request(app)
-        .post("/api/projects/admin")
+        .post("/api/admin/projects")
         .set("Cookie", accessToken)
         .send({
           title: "test project",
