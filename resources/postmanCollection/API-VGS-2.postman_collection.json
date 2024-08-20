@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"VagoDev_1\",\n    \"password\": \"Iwdmbilmtnsm1!\"\n}",
+					"raw": "{\n    \"username\": \"VagoDevTesting_1\",\n    \"password\": \"test\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -88,7 +88,55 @@
 			"response": []
 		},
 		{
-			"name": "create-project",
+			"name": "allProjects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/projects?order_by=title&order=DESC&limit=10&offset=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects"
+					],
+					"query": [
+						{
+							"key": "order_by",
+							"value": "title"
+						},
+						{
+							"key": "order",
+							"value": "DESC"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "tags",
+							"value": "2D,3D",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "new",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createProject",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -102,7 +150,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/projects/admin",
+					"raw": "http://localhost:5000/api/admin/projects",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -110,8 +158,8 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"projects",
-						"admin"
+						"admin",
+						"projects"
 					]
 				}
 			},
@@ -133,6 +181,37 @@
 						"api",
 						"projects",
 						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createResource",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"www.google.com\",\n    \"type_id\": 1,\n    \"project_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/admin/projects/resources",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"projects",
+						"resources"
 					]
 				}
 			},

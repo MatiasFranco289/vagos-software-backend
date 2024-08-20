@@ -1,8 +1,13 @@
 import { Router } from "express";
-import { projectStatesController } from "../controllers/projectStates";
+import { projectsController } from "../controllers/projects";
+import { getAllProjectsValidation } from "../validations/projects";
 
-const projectStates = Router();
+const projectsRouter = Router();
 
-projectStates.get("/", projectStatesController.getAllStates);
+projectsRouter.get(
+  "/",
+  getAllProjectsValidation,
+  projectsController.getAllProjects
+);
 
-export default projectStates;
+export default projectsRouter;

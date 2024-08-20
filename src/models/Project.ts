@@ -30,6 +30,7 @@ class Project
   public creatorId!: ForeignKey<User["id"]>;
 
   public addTags!: BelongsToManyAddAssociationMixin<Tag, Tag[]>;
+  public tags?: Tag[];
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
