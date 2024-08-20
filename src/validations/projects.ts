@@ -33,12 +33,14 @@ export const createProjectValidation = [
 
   body("end_date")
     .optional()
-    .isDate()
+    .customSanitizer((value) => (value === "" ? null : value))
+    .custom((value) => value === null || !isNaN(Date.parse(value)))
     .withMessage("end_date should be a date."),
 
   body("expected_end_date")
     .optional()
-    .isDate()
+    .customSanitizer((value) => (value === "" ? null : value))
+    .custom((value) => value === null || !isNaN(Date.parse(value)))
     .withMessage("expected_end_date should be a date."),
 
   body("status_id")
