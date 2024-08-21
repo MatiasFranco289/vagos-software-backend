@@ -1,6 +1,6 @@
 // This file declare routes for project only for admins
 import { Router } from "express";
-import { projectsAdminController } from "../controllers/projects";
+import { projectsController } from "../controllers/projects";
 import { createProjectValidation } from "../validations/projects";
 
 const projectsAdminRouter = Router();
@@ -8,7 +8,7 @@ const projectsAdminRouter = Router();
 projectsAdminRouter.post(
   "/",
   createProjectValidation,
-  projectsAdminController.createProject
+  projectsController.createProject
 );
 
 export default projectsAdminRouter;

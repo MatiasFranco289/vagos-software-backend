@@ -5,12 +5,13 @@ import authRouter from "./routes/auth";
 import startServer from "./config/server";
 import swaggerSetup from "./config/swagger";
 import bodyKeysToSnakeCase from "./middlewares/bodyToSnakeCaseMiddleware";
-import { ROLENAME_ADMIN, ROLENAME_USER, TESTING } from "./constants";
+import { ROLENAME_ADMIN, TESTING } from "./constants";
 import { validateToken } from "./middlewares/auth";
 import tagRouter from "./routes/tags";
-import projectStates from "./routes/projects";
+import projectsRouter from "./routes/projects";
 import projectsAdminRouter from "./routes/projectsAdmin";
 import resourcesAdminRouter from "./routes/resourcesAdmin";
+import projectStatesRouter from "./routes/projectStates";
 
 dotenv.config();
 const app = express();
@@ -32,8 +33,9 @@ apiRouter.use(bodyKeysToSnakeCase);
 
 apiRouter.use("/auth", authRouter);
 
+apiRouter.use("/projects", projectsRouter);
 apiRouter.use("/projects/tags", tagRouter);
-apiRouter.use("/projects/status", projectStates);
+apiRouter.use("/projects/status", projectStatesRouter);
 
 // Routes below this point are only for admins or admin
 apiRouter.use(validateToken([ROLENAME_ADMIN]));

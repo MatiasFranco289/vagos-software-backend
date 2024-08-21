@@ -1,14 +1,37 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { ApiResponse } from "../interfaces";
-import { STATUS_CODE_BAD_REQUEST, STATUS_CODE_CREATED } from "../constants";
+import {
+  INTERNAL_SERVER_ERROR_MESSAGE,
+  STATUS_CODE_BAD_REQUEST,
+  STATUS_CODE_CREATED,
+  STATUS_CODE_INTERNAL_SERVER_ERROR,
+  STATUS_CODE_OK,
+} from "../constants";
 import Tag from "../models/Tag";
-import { Op } from "sequelize";
+import { fn, literal, Op, QueryTypes, Sequelize } from "sequelize";
 import Project from "../models/Project";
 import ProjectStatus from "../models/ProjectStatus";
 import Board from "../models/Board";
 import { handleApiError } from "../utils";
+import sequelize from "../config/dbConnection";
 
+export const PROJECTS_ORDER_BY_TYPES = [
+  "id",
+  "title",
+  "status_id",
+  "start_date",
+  "end_date",
+  "expected_end_date",
+  "creator_id",
+];
+export const DEFAULT_PROJECTS_ORDER_BY = "title";
+export const DEFAULT_PROJECTS_ORDER = "ASC";
+export const DEFAULT_PROJECTS_LIMIT = "20";
+export const DEFAULT_PROJECTS_OFFSET = "0";
+
+export const SUCCESS_PROJECTS_RETRIVED_MESSAGE =
+  "Projects retrieved successfully.";
 export const CREATOR_NOT_FOUND_MESSAGE =
   "No user was found with the provided id.";
 export const STATUS_ID_NOT_FOUND_MESSAGE =
@@ -36,7 +59,7 @@ type ProjectCreationBodyRequest = {
   creator_id: number;
 };
 
-export const projectsAdminController = {
+export const projectsController = {
   createProject: async (req: Request, res: Response<ApiResponse<null>>) => {
     const {
       title,
@@ -105,6 +128,107 @@ export const projectsAdminController = {
       response.message = SUCCESS_PROJECT_CREATION_MESSAGE;
     } catch (err) {
       response = handleApiError(err, DEFAULT_ERROR_MESSAGE);
+    }
+
+    return res.status(response.status_code).json(response);
+  },
+
+  getAllProjects: async (req: Request, res: Response<ApiResponse<Project>>) => {
+    let response: ApiResponse<Project | null> = {
+      status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
+      message: INTERNAL_SERVER_ERROR_MESSAGE,
+      data: [],
+    };
+
+    const order_by =
+      (req.query.order_by as string) || DEFAULT_PROJECTS_ORDER_BY;
+    const order = (req.query.order as string) || DEFAULT_PROJECTS_ORDER;
+    const limit = parseInt(
+      (req.query.limit as string) || DEFAULT_PROJECTS_LIMIT
+    );
+    const offset = parseInt(
+      (req.query.offset as string) || DEFAULT_PROJECTS_OFFSET
+    );
+    const search = req.query.search;
+    let tags: string | string[] = req.query.tags as string;
+    tags = tags ? tags.split(",") : [];
+
+    try {
+      let projectFilteredByTagsIds: Array<number>;
+
+      // If the client is trying to filter by tags
+      // I get all the projects ids with tags matching the required
+      if (tags.length) {
+        projectFilteredByTagsIds = (
+          await Project.findAll({
+            include: [
+              {
+                model: Tag,
+                as: "tags",
+                attributes: [],
+                where: {
+                  name: {
+                    [Op.in]: tags,
+                  },
+                },
+                through: {
+                  attributes: [],
+                },
+              },
+            ],
+            attributes: ["id"],
+            group: ["Project.id"],
+            having: literal(`COUNT(DISTINCT "tags"."name") = ${tags.length}`),
+          })
+        ).map((project) => {
+          return project.id;
+        });
+      }
+
+      // If there are tags, i add the filter clause, filtering for the ids retrieved by the query above
+      let projectsWhereClause: any = tags.length
+        ? {
+            id: {
+              [Op.in]: projectFilteredByTagsIds,
+            },
+          }
+        : null;
+
+      // if the client is trying to search i add filter by project title
+      if (search) {
+        projectsWhereClause = {
+          ...projectsWhereClause,
+          title: {
+            [Op.iLike]: `%${search}%`,
+          },
+        };
+      }
+
+      // finally i find all the projects with the ids retrieved by the query above
+      // but i include all the needed data, sorting, limit and offset
+      const projects = await Project.findAll({
+        where: projectsWhereClause,
+        include: [
+          {
+            model: Tag,
+            as: "tags",
+            through: { attributes: [] },
+          },
+          {
+            model: ProjectStatus,
+            as: "status",
+          },
+        ],
+        order: [[order_by, order]],
+        limit: limit,
+        offset: offset,
+      });
+
+      response.status_code = STATUS_CODE_OK;
+      response.message = SUCCESS_PROJECTS_RETRIVED_MESSAGE;
+      response.data = projects;
+    } catch (err) {
+      console.log(err);
     }
 
     return res.status(response.status_code).json(response);

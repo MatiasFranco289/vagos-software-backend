@@ -42,5 +42,5 @@
  *                     type: string
  *                   example: []
  *     tags:
- *       - Logout
+ *       - Auth
  */

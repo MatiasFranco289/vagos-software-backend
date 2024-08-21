@@ -1,6 +1,7 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import { validateResult } from "../middlewares/validateMiddleware";
+import { PROJECTS_ORDER_BY_TYPES } from "../controllers/projects";
 
 export const createProjectValidation = [
   body("title")
@@ -73,6 +74,40 @@ export const createProjectValidation = [
     .isInt()
     .withMessage("creator_id should be an integer."),
 
+  (req: Request, res: Response, next: NextFunction) => {
+    validateResult(req, res, next);
+  },
+];
+
+export const getAllProjectsValidation = [
+  query("order_by")
+    .optional()
+    .isIn(PROJECTS_ORDER_BY_TYPES)
+    .withMessage(
+      `order_by can only be ${PROJECTS_ORDER_BY_TYPES.map((order_by) => {
+        return order_by;
+      })}`
+    ),
+  query("order")
+    .optional()
+    .isIn(["ASC", "DESC"])
+    .withMessage("order can only be 'ASC' or 'DESC'"),
+  query("limit")
+    .optional()
+    .isNumeric()
+    .withMessage("limit should be a number."),
+  query("offset")
+    .optional()
+    .isNumeric()
+    .withMessage("offset should be a number."),
+  query("tags")
+    .optional()
+    .notEmpty()
+    .withMessage("tags should be an string of comma separated tag names."),
+  query("search")
+    .optional()
+    .isLength({ min: 3 })
+    .withMessage("search must be at least 3 characters long."),
   (req: Request, res: Response, next: NextFunction) => {
     validateResult(req, res, next);
   },

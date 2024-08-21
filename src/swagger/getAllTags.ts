@@ -76,5 +76,5 @@
  *                     type: string
  *                   example: []
  *     tags:
- *       - Get all tags
+ *       - Tags
  */
