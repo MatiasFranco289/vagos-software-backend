@@ -133,5 +133,5 @@
  *                     type: string
  *                   example: []
  *     tags:
- *       - Login
+ *       - Auth
  */

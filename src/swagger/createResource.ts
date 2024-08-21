@@ -99,5 +99,5 @@
  *                     type: string
  *                   example: []
  *     tags:
- *       - Create resource
+ *       - Resources
  */

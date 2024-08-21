@@ -132,5 +132,5 @@
  *                     type: string
  *                   example: []
  *     tags:
- *       - Create project
+ *       - Projects
  */

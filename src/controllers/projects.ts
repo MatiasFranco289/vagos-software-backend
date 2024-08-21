@@ -132,6 +132,7 @@ export const projectsController = {
 
     return res.status(response.status_code).json(response);
   },
+
   getAllProjects: async (req: Request, res: Response<ApiResponse<Project>>) => {
     let response: ApiResponse<Project | null> = {
       status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
@@ -207,11 +208,17 @@ export const projectsController = {
       // but i include all the needed data, sorting, limit and offset
       const projects = await Project.findAll({
         where: projectsWhereClause,
-        include: {
-          model: Tag,
-          as: "tags",
-          through: { attributes: [] },
-        },
+        include: [
+          {
+            model: Tag,
+            as: "tags",
+            through: { attributes: [] },
+          },
+          {
+            model: ProjectStatus,
+            as: "status",
+          },
+        ],
         order: [[order_by, order]],
         limit: limit,
         offset: offset,
