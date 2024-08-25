@@ -133,8 +133,14 @@ export const projectsController = {
     return res.status(response.status_code).json(response);
   },
 
-  getAllProjects: async (req: Request, res: Response<ApiResponse<Project>>) => {
-    let response: ApiResponse<Project | null> = {
+  getAllProjects: async (
+    req: Request,
+    res: Response<ApiResponse<{ projects: Array<Project>; total: number }>>
+  ) => {
+    let response: ApiResponse<{
+      projects: Array<Project>;
+      total: number;
+    } | null> = {
       status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
       message: INTERNAL_SERVER_ERROR_MESSAGE,
       data: [],
@@ -204,7 +210,7 @@ export const projectsController = {
         };
       }
 
-      // finally i find all the projects with the ids retrieved by the query above
+      // i find all the projects with the ids retrieved by the query above
       // but i include all the needed data, sorting, limit and offset
       const projects = await Project.findAll({
         where: projectsWhereClause,
@@ -224,9 +230,19 @@ export const projectsController = {
         offset: offset,
       });
 
+      // finally i get the total amount of projects fullfilling all conditions
+      const totalProjects = await Project.count({
+        where: projectsWhereClause,
+      });
+
       response.status_code = STATUS_CODE_OK;
       response.message = SUCCESS_PROJECTS_RETRIVED_MESSAGE;
-      response.data = projects;
+      response.data = [
+        {
+          projects: projects,
+          total: totalProjects,
+        },
+      ];
     } catch (err) {
       console.log(err);
     }

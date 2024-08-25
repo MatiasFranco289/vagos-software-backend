@@ -248,7 +248,7 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data).toHaveLength(10);
+      expect(bodyResponse.data[0].projects).toHaveLength(10);
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
 
@@ -260,7 +260,7 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data).toHaveLength(5);
+      expect(bodyResponse.data[0].projects).toHaveLength(5);
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
 
@@ -272,8 +272,8 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data).toHaveLength(1);
-      expect(bodyResponse.data[0].id).toBe(10);
+      expect(bodyResponse.data[0].projects).toHaveLength(1);
+      expect(bodyResponse.data[0].projects[0].id).toBe(10);
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
 
@@ -285,7 +285,7 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data[0].title).toBe("test_9");
+      expect(bodyResponse.data[0].projects[0].title).toBe("test_9");
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
 
@@ -297,7 +297,7 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data[0].title).toBe("test_4");
+      expect(bodyResponse.data[0].projects[0].title).toBe("test_4");
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
 
@@ -309,10 +309,10 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data).toHaveLength(2);
+      expect(bodyResponse.data[0].projects).toHaveLength(2);
 
-      expect(bodyResponse.data[0].title).toBe("test_1");
-      expect(bodyResponse.data[1].title).toBe("test_2");
+      expect(bodyResponse.data[0].projects[0].title).toBe("test_1");
+      expect(bodyResponse.data[0].projects[1].title).toBe("test_2");
 
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
@@ -325,7 +325,7 @@ export const getAllProjectTest = () =>
       const bodyResponse: ApiResponse<any> = response.body;
 
       expect(response.status).toBe(STATUS_CODE_OK);
-      expect(bodyResponse.data).toHaveLength(0);
+      expect(bodyResponse.data[0].projects).toHaveLength(0);
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
   });
