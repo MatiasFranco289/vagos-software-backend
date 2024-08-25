@@ -2,12 +2,22 @@ import { ProjectStatusCreationAttributes } from "../../src/models/ProjectStatus"
 
 const projectStatus: Array<ProjectStatusCreationAttributes> = [
   {
-    id: 1,
-    name: "WORKING",
+    name: "BORRADOR",
   },
   {
-    id: 2,
-    name: "FINISHED",
+    name: "PENDIENTE",
+  },
+  {
+    name: "PAUSADO",
+  },
+  {
+    name: "ACTIVO",
+  },
+  {
+    name: "CANCELADO",
+  },
+  {
+    name: "FINALIZADO",
   },
 ];
 

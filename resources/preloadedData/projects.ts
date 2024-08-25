@@ -2,7 +2,8 @@ import { ProjectCreationAtributes } from "../../src/models/Project";
 const projects: Array<ProjectCreationAtributes> = [
   {
     title: "test",
-    thumbnailUrl: "www.test.png",
+    thumbnailUrl:
+      "https://lh3.googleusercontent.com/a/ACg8ocJc4xXvwYl6TRzZNaf8Vg5SNtzN0FrnJkq3uPUsHvbX_rKZ0L8=s288-c-no",
     description: "test description",
     startDate: "2024-08-13",
     endDate: "2024-08-13",

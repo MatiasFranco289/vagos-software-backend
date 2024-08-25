@@ -11,24 +11,22 @@ function camelToSnakeCase(text: string): string {
 // This function uses recursivity to iterate over all keys of an object
 // if the key of the object is also another object it will iterate over the sub-object recursively
 // it will return the same object but having all keys transformed to snake_case
-function objectKeysToSnakeCase(obj: AnyObject): AnyObject {
-  const result: AnyObject = {};
-
-  function recurse(currentObj: AnyObject, resultObj: AnyObject): void {
-    Object.keys(currentObj).forEach((key) => {
+function objectKeysToSnakeCase(obj: any): any {
+  if (Array.isArray(obj)) {
+    // Si el objeto es un array, mapear cada elemento recursivamente
+    return obj.map((item) => objectKeysToSnakeCase(item));
+  } else if (typeof obj === "object" && obj !== null) {
+    // Si el objeto es un objeto regular, iterar sobre sus claves
+    const result: any = {};
+    Object.keys(obj).forEach((key) => {
       const snakeKey = camelToSnakeCase(key);
-
-      if (typeof currentObj[key] === "object" && currentObj[key] !== null) {
-        resultObj[snakeKey] = {};
-        recurse(currentObj[key], resultObj[snakeKey]);
-      } else {
-        resultObj[snakeKey] = currentObj[key];
-      }
+      result[snakeKey] = objectKeysToSnakeCase(obj[key]);
     });
+    return result;
+  } else {
+    // Si el objeto no es un array ni un objeto, retornarlo tal cual
+    return obj;
   }
-
-  recurse(obj, result);
-  return result;
 }
 
 const bodyKeysToSnakeCase = (
