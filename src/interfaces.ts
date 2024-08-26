@@ -72,3 +72,11 @@ export interface BoardAttributes {
   title: string;
   projectId: number;
 }
+
+export interface BlogAttributes {
+  id: number;
+  title: string;
+  description: string;
+  projectId: number;
+  userId: number;
+}
