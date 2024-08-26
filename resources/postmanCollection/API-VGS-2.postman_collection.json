@@ -93,7 +93,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/projects?order_by=title&order=DESC&limit=10&offset=0",
+					"raw": "http://localhost:5000/api/projects",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -106,19 +106,23 @@
 					"query": [
 						{
 							"key": "order_by",
-							"value": "title"
+							"value": "title",
+							"disabled": true
 						},
 						{
 							"key": "order",
-							"value": "DESC"
+							"value": "DESC",
+							"disabled": true
 						},
 						{
 							"key": "limit",
-							"value": "10"
+							"value": "10",
+							"disabled": true
 						},
 						{
 							"key": "offset",
-							"value": "0"
+							"value": "0",
+							"disabled": true
 						},
 						{
 							"key": "tags",
@@ -127,7 +131,7 @@
 						},
 						{
 							"key": "search",
-							"value": "new",
+							"value": "test_4",
 							"disabled": true
 						}
 					]
@@ -142,7 +146,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"new project\",\n    \"description\": \"this is a new project\",\n    \"thumbnail_url\": \"www.google.com\",\n    \"start_date\": \"2024-08-13\",\n    \"status_id\": 1,\n    \"repository_url\": \"www.github.com\",\n    \"tags_id\": [1,2],\n    \"creator_id\": 1\n}",
+					"raw": "{\n    \"title\": \"new project2\",\n    \"description\": \"this is a new project\",\n    \"thumbnail_url\": \"https://lh3.googleusercontent.com/a/ACg8ocJc4xXvwYl6TRzZNaf8Vg5SNtzN0FrnJkq3uPUsHvbX_rKZ0L8=s288-c-no\",\n    \"start_date\": \"2024-08-13\",\n    \"status_id\": 1,\n    \"repository_url\": \"www.github.com\",\n    \"tags_id\": [1,2,3,4],\n    \"creator_id\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -212,6 +216,36 @@
 						"admin",
 						"projects",
 						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createBlog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"test\",\n    \"description\": \"test blog\",\n    \"user_id\": 1,\n    \"project_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/admin/blogs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"blogs"
 					]
 				}
 			},
