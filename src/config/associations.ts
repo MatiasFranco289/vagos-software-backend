@@ -6,6 +6,7 @@ import Tag from "../models/Tag";
 import Resource from "../models/Resource";
 import ResourceType from "../models/ResourceType";
 import Board from "../models/Board";
+import Blog from "../models/Blog";
 
 export default async function createAssociations() {
   User.belongsTo(Role, {
@@ -55,6 +56,26 @@ export default async function createAssociations() {
   Resource.belongsTo(Project, {
     foreignKey: "project_id",
     as: "project",
+  });
+
+  Project.hasMany(Blog, {
+    foreignKey: "project_id",
+    as: "blogs",
+  });
+
+  Blog.belongsTo(Project, {
+    foreignKey: "project_id",
+    as: "project",
+  });
+
+  User.hasMany(Blog, {
+    foreignKey: "user_id",
+    as: "blogs",
+  });
+
+  Blog.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "user",
   });
 
   Project.hasOne(Board, {

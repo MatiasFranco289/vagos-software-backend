@@ -12,6 +12,7 @@ import Board from "../models/Board";
 
 import { PRODUCTION } from "../constants";
 import UserStatus from "../models/UserStatus";
+import Blog from "../models/Blog";
 
 const models = [
   UserStatus,
@@ -23,6 +24,7 @@ const models = [
   Project,
   Board,
   User,
+  Blog,
 ];
 
 const syncDatabase = async () => {

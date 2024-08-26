@@ -4,6 +4,7 @@ import { tagsTest } from "./tags";
 import { projectStatesTest } from "./projectStates";
 import { resourcesTest } from "./resources";
 import { getAllProjectTest } from "./projects";
+import { createBlogsTest } from "./blogs";
 
 describe("sequentially run tests", () => {
   authTests();
@@ -12,4 +13,5 @@ describe("sequentially run tests", () => {
   projectStatesTest();
   resourcesTest();
   getAllProjectTest();
+  createBlogsTest();
 });

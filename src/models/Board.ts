@@ -13,6 +13,9 @@ class Board
   public id!: number;
   public title!: string;
   public projectId!: ForeignKey<Project["id"]>;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 Board.init(
