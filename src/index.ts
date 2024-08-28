@@ -34,9 +34,9 @@ apiRouter.use(bodyKeysToSnakeCase);
 
 apiRouter.use("/auth", authRouter);
 
-apiRouter.use("/projects", projectsRouter);
 apiRouter.use("/projects/tags", tagRouter);
 apiRouter.use("/projects/status", projectStatesRouter);
+apiRouter.use("/projects", projectsRouter);
 
 // Routes below this point are only for admins or admin
 apiRouter.use(validateToken([ROLENAME_ADMIN]));

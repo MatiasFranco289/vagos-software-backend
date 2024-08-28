@@ -14,7 +14,11 @@ import Project from "../models/Project";
 import ProjectStatus from "../models/ProjectStatus";
 import Board from "../models/Board";
 import { handleApiError } from "../utils";
-import sequelize from "../config/dbConnection";
+import Blog from "../models/Blog";
+import Resource from "../models/Resource";
+import Role from "../models/Role";
+import UserStatus from "../models/UserStatus";
+import ResourceType from "../models/ResourceType";
 
 export const PROJECTS_ORDER_BY_TYPES = [
   "id",
@@ -32,6 +36,8 @@ export const DEFAULT_PROJECTS_OFFSET = "0";
 
 export const SUCCESS_PROJECTS_RETRIVED_MESSAGE =
   "Projects retrieved successfully.";
+export const SUCCESS_PROJECT_RETRIEVED_MESSAGE =
+  "Project retrieved successfully.";
 export const CREATOR_NOT_FOUND_MESSAGE =
   "No user was found with the provided id.";
 export const STATUS_ID_NOT_FOUND_MESSAGE =
@@ -42,8 +48,10 @@ export const RESOURCE_NOT_FOUND_MESSAGE =
   "Some of the ids delivered do not correspond to an existing tag.";
 export const SUCCESS_PROJECT_CREATION_MESSAGE =
   "The project has been successfully created.";
-const DEFAULT_ERROR_MESSAGE =
-  "The following error has ocurred while trying to create a project.";
+const DEFAULT_CREATION_ERROR_MESSAGE =
+  "The following error has ocurred while trying to create a project: ";
+const DEFAULT_RETRIEVE_ERROR_MESSAGE =
+  "The following error has ocurred while trying to recover the project: ";
 
 // Expected attributes in body object for project creation
 type ProjectCreationBodyRequest = {
@@ -127,7 +135,7 @@ export const projectsController = {
       response.status_code = STATUS_CODE_CREATED;
       response.message = SUCCESS_PROJECT_CREATION_MESSAGE;
     } catch (err) {
-      response = handleApiError(err, DEFAULT_ERROR_MESSAGE);
+      response = handleApiError(err, DEFAULT_CREATION_ERROR_MESSAGE);
     }
 
     return res.status(response.status_code).json(response);
@@ -245,6 +253,65 @@ export const projectsController = {
       ];
     } catch (err) {
       console.log(err);
+    }
+
+    return res.status(response.status_code).json(response);
+  },
+  getProjectById: async (
+    req: Request,
+    res: Response<ApiResponse<null | Project>>
+  ) => {
+    let response: ApiResponse<null | Project> = {
+      status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
+      message: INTERNAL_SERVER_ERROR_MESSAGE,
+      data: [],
+    };
+
+    const { id } = req.params;
+
+    try {
+      const project = await Project.findByPk(id, {
+        include: [
+          {
+            model: Tag,
+            as: "tags",
+            through: { attributes: [] },
+          },
+          {
+            model: ProjectStatus,
+            as: "status",
+          },
+          {
+            model: Blog,
+            as: "blogs",
+          },
+          {
+            model: Resource,
+            as: "resources",
+            include: [{ model: ResourceType, as: "type" }],
+          },
+          {
+            model: User,
+            as: "creator",
+            attributes: { exclude: ["password"] },
+            include: [
+              { model: Role, as: "role" },
+              { model: UserStatus, as: "status" },
+            ],
+          },
+          {
+            model: Board,
+            as: "board",
+          },
+        ],
+      });
+
+      response.status_code = STATUS_CODE_OK;
+      response.message = SUCCESS_PROJECT_RETRIEVED_MESSAGE;
+      response.data = project ? [project] : [];
+    } catch (err) {
+      console.error(DEFAULT_RETRIEVE_ERROR_MESSAGE);
+      console.error(err);
     }
 
     return res.status(response.status_code).json(response);

@@ -10,4 +10,6 @@ projectsRouter.get(
   projectsController.getAllProjects
 );
 
+projectsRouter.get("/:id", projectsController.getProjectById);
+
 export default projectsRouter;

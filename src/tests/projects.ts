@@ -329,3 +329,49 @@ export const getAllProjectTest = () =>
       expect(bodyResponse.message).toBe(SUCCESS_PROJECTS_RETRIVED_MESSAGE);
     });
   });
+
+export const getProjectById = () =>
+  describe("GET /api/projects/:id", () => {
+    beforeAll(async () => {
+      await ProjectStatus.create({
+        id: 1,
+        name: "test status",
+      });
+
+      await Project.create({
+        id: 1,
+        title: `test_1`,
+        thumbnailUrl: "www.test.png",
+        description: "test description",
+        startDate: "2024-08-13",
+        endDate: "2024-08-13",
+        expectedEndDate: "2024-08-13",
+        repositoryUrl: "www.github.com",
+        statusId: 1,
+        creatorId: 1,
+      });
+    });
+
+    afterAll(async () => {
+      await Project.destroy({ where: {} });
+      await ProjectStatus.destroy({ where: {} });
+    });
+
+    it("Should retrieve the project extensively", async () => {
+      const response = await request(app)
+        .get("/api/projects/1")
+        .set("Cookie", global.accessToken);
+      const bodyResponse: ApiResponse<any> = response.body;
+
+      console.log(bodyResponse);
+
+      expect(response.status).toBe(STATUS_CODE_OK);
+      expect(bodyResponse.status_code).toBe(STATUS_CODE_OK);
+
+      expect("tags" in bodyResponse.data[0]).toBeTruthy();
+      expect("blogs" in bodyResponse.data[0]).toBeTruthy();
+      expect("resources" in bodyResponse.data[0]).toBeTruthy();
+      expect("creator" in bodyResponse.data[0]).toBeTruthy();
+      expect("board" in bodyResponse.data[0]).toBeTruthy();
+    });
+  });

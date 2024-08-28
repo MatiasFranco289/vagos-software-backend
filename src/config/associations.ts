@@ -7,6 +7,7 @@ import Resource from "../models/Resource";
 import ResourceType from "../models/ResourceType";
 import Board from "../models/Board";
 import Blog from "../models/Blog";
+import UserStatus from "../models/UserStatus";
 
 export default async function createAssociations() {
   User.belongsTo(Role, {
@@ -97,5 +98,15 @@ export default async function createAssociations() {
   User.hasMany(Project, {
     foreignKey: "creatorId",
     as: "projects",
+  });
+
+  User.belongsTo(UserStatus, {
+    foreignKey: "status_id",
+    as: "status",
+  });
+
+  UserStatus.hasMany(User, {
+    foreignKey: "status_id",
+    as: "users",
   });
 }

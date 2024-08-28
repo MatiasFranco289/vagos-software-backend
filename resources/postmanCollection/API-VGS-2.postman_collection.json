@@ -170,6 +170,27 @@
 			"response": []
 		},
 		{
+			"name": "getProjectById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/projects/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "allProjectStatus",
 			"request": {
 				"method": "GET",
