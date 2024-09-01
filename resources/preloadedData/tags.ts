@@ -18,6 +18,14 @@ const tags: Array<TagCreationAttributes> = [
     id: 4,
     name: "Roguelike",
   },
+  {
+    id: 5,
+    name: "Aplicación",
+  },
+  {
+    id: 6,
+    name: "Web",
+  },
 ];
 
 export default tags;
