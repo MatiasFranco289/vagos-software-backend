@@ -1,48 +1,122 @@
-import { ApiResponse } from "../interfaces";
+import { ApiResponse, UserAtributes } from "../interfaces";
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+import { comparePassword } from "../utils";
+import {
+  PRODUCTION,
+  STATUS_CODE_INTERNAL_SERVER_ERROR,
+  STATUS_CODE_NOT_FOUND,
+  STATUS_CODE_OK,
+  STATUS_CODE_UNAUTHORIZED,
+  DEFAULT_SECRET,
+  INTERNAL_SERVER_ERROR_MESSAGE,
+} from "../constants";
+import Role from "../models/Role";
 
-interface MockedRoles {
-  id: number;
-  rolename: "USER" | "ADMIN";
-}
+export const INVALID_PASSWORD_MESSAGE = "Invalid password.";
+export const SUCCESSFUL_LOGIN_MESSAGE = "Login successful.";
+export const USER_NOT_FOUND_MESSAGE = "User not found.";
+export const SUCCESSFUL_LOGOUT_MESSAGE = "Logout successful.";
+export const TOKEN_DURATION = "24h";
+export const SECRET_PASSWORD = "******";
+export const TOKEN_NAME = "access_token";
 
-interface MockedUser {
-  id: number;
-  username: string;
-  roles: Array<MockedRoles>;
-}
+export const authController = {
+  login: async (
+    req: Request,
+    res: Response<ApiResponse<UserAtributes | null>>
+  ) => {
+    const { username, password }: { username: string; password: string } =
+      req.body;
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-const COOKIE_MAX_AGE = parseInt(process.env.COOKIE_MAX_AGE!) || 1000 * 60 * 60;
-
-export const AuthController = {
-  login: async (req: Request, res: Response<ApiResponse<MockedUser>>) => {
-    const statusCode: number = 200;
-
-    const response: ApiResponse<MockedUser> = {
-      statusCode: statusCode,
-      message: "Successful login",
-      data: [
-        {
-          id: 1,
-          username: "VagoDev1",
-          roles: [
-            {
-              id: 1,
-              rolename: "ADMIN",
-            },
-          ],
-        },
-      ],
+    var response: ApiResponse<UserAtributes | null> = {
+      status_code: STATUS_CODE_NOT_FOUND,
+      message: USER_NOT_FOUND_MESSAGE,
+      data: [],
     };
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      sameSite: "strict",
-      maxAge: COOKIE_MAX_AGE,
-    });
+    try {
+      const user = await User.findOne({
+        where: { username },
+        include: { model: Role, as: "role" },
+      });
 
-    res.status(statusCode).json(response);
+      if (!user) {
+        return res.status(response.status_code).json(response);
+      }
+
+      const isPasswordValid = await comparePassword(
+        password,
+        user.dataValues.password
+      );
+
+      if (!isPasswordValid) {
+        response = {
+          ...response,
+          status_code: STATUS_CODE_UNAUTHORIZED,
+          message: INVALID_PASSWORD_MESSAGE,
+        };
+
+        return res.status(response.status_code).json(response);
+      }
+
+      const token = jwt.sign(
+        user.dataValues,
+        process.env.SECRET || DEFAULT_SECRET,
+        {
+          expiresIn: TOKEN_DURATION,
+        }
+      );
+
+      res.cookie(TOKEN_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === PRODUCTION,
+        sameSite: "strict",
+      });
+
+      user.set("password", SECRET_PASSWORD);
+
+      response = {
+        ...response,
+        status_code: STATUS_CODE_OK,
+        message: SUCCESSFUL_LOGIN_MESSAGE,
+        data: [user],
+      };
+
+      return res.status(response.status_code).json(response);
+    } catch (err) {
+      response = {
+        ...response,
+        status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
+        message: INTERNAL_SERVER_ERROR_MESSAGE,
+      };
+
+      console.error(err);
+
+      res.status(response.status_code).json(response);
+    }
+  },
+  logout: (_req: Request, res: Response<ApiResponse<null>>) => {
+    let response: ApiResponse<null> = {
+      status_code: STATUS_CODE_OK,
+      message: SUCCESSFUL_LOGOUT_MESSAGE,
+      data: [],
+    };
+
+    try {
+      res.clearCookie(TOKEN_NAME, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === PRODUCTION,
+        sameSite: "strict",
+      });
+    } catch (err) {
+      response.status_code = STATUS_CODE_INTERNAL_SERVER_ERROR;
+      response.message = INTERNAL_SERVER_ERROR_MESSAGE;
+
+      console.error(err);
+    }
+
+    res.status(response.status_code).json(response);
   },
 };
