@@ -284,6 +284,13 @@ export const projectsController = {
           {
             model: Blog,
             as: "blogs",
+            include: [
+              {
+                model: User,
+                as: "user",
+                attributes: { exclude: ["password"] },
+              },
+            ],
           },
           {
             model: Resource,

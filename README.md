@@ -10,6 +10,50 @@ If it is your first time running the app you can define whatever username, passw
 
 ## Docker
 
+### Updating docker-compose
+
+The repository of Ubuntu have an outdated version of docker-compose which doesn't allows the execution of modern Dockerfiles.
+
+In order to update your docker-compose version you must follow this steps:
+
+Update the index of packages with the following command:
+
+```bash
+sudo apt update
+```
+
+Download the last version of docker-compose available for your system:
+
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+Give execution permissions:
+
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+Be sure you have the updated version:
+
+```bash
+docker-compose --version
+```
+
+Export the path so your system can find executables in it:
+
+```bash
+export PATH="$PATH:/usr/local/bin"
+```
+
+Finally update your session by executing:
+
+```bash
+source ~/.bashrc
+```
+
+### Docker project setup
+
 This project uses docker-compose. In order to run the project you must first create the image by using the following command:
 
 ```bash
