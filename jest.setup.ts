@@ -18,17 +18,14 @@ beforeAll(async () => {
   const encryptedPassword = await encryptPassword(userPassword);
 
   const userRole = await Role.create({
-    id: 1,
     name: "ADMIN",
   });
 
   const userStatus = await UserStatus.create({
-    id: 1,
     name: "ACTIVE",
   });
 
   const user = await User.create({
-    id: 1,
     username: "test",
     email: "test@gmail.com",
     password: encryptedPassword,
