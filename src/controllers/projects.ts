@@ -311,6 +311,7 @@ export const projectsController = {
             as: "board",
           },
         ],
+        order: [[{ model: Blog, as: "blogs" }, "createdAt", "DESC"]],
       });
 
       response.status_code = STATUS_CODE_OK;
