@@ -241,6 +241,28 @@
 			"response": []
 		},
 		{
+			"name": "allResourceTypes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/admin/resources/types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"resources",
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "createResource",
 			"request": {
 				"method": "POST",
@@ -302,10 +324,19 @@
 			"response": []
 		},
 		{
-			"name": "allResourceTypes",
+			"name": "createResourceType",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:5000/api/admin/resources/types",
 					"protocol": "http",

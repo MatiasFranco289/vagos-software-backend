@@ -1,14 +1,24 @@
 /**
  * @swagger
  * /api/admin/resources/types:
- *   get:
- *     summary: Retrieve all resource types
- *     description: This endpoint retrieves all resource types stored in the database. If successful, it returns a list of resource types. If an error occurs, an appropriate error message and status code are returned.
+ *   post:
+ *     summary: Create a new resource type
+ *     description: This endpoint creates a new resource type. If successful, it returns the created resource type. If an error occurs, an appropriate error message and status code are returned.
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "IMAGE"
  *     responses:
- *       200:
- *         description: Resource types retrieved successfully. Returns a list of resource types.
+ *       201:
+ *         description: Resource type created successfully. Returns the created resource type.
  *         content:
  *           application/json:
  *             schema:
@@ -16,10 +26,10 @@
  *               properties:
  *                 status_code:
  *                   type: integer
- *                   example: 200
+ *                   example: 201
  *                 message:
  *                   type: string
- *                   example: "Resource types successfully retrieved."
+ *                   example: "The resource type was successfully created."
  *                 data:
  *                   type: array
  *                   items:
@@ -27,18 +37,48 @@
  *                     properties:
  *                       id:
  *                         type: integer
- *                         example: 1
+ *                         example: 4
  *                       name:
  *                         type: string
  *                         example: "IMAGE"
  *                       created_at:
  *                         type: string
  *                         format: date-time
- *                         example: "2024-08-11T04:17:07.511Z"
+ *                         example: "2024-09-14T04:58:10.840Z"
  *                       updated_at:
  *                         type: string
  *                         format: date-time
- *                         example: "2024-08-11T04:17:07.511Z"
+ *                         example: "2024-09-14T04:58:10.840Z"
+ *       400:
+ *         description: Bad Request. The provided data is invalid.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "Bad Request"
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       type:
+ *                         type: string
+ *                         example: "field"
+ *                       msg:
+ *                         type: string
+ *                         example: "name should be provided."
+ *                       path:
+ *                         type: string
+ *                         example: "name"
+ *                       location:
+ *                         type: string
+ *                         example: "body"
  *       401:
  *         description: Unauthorized. The provided token is invalid or missing.
  *         content:
