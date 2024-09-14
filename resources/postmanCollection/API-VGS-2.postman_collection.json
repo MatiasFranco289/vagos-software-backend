@@ -300,6 +300,28 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "allResourceTypes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/admin/resources/types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"resources",
+						"types"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
