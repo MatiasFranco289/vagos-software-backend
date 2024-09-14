@@ -36,10 +36,10 @@ export const createUserTest = () => {
     });
   });
 
-  describe("POST /api/auth/login", () => {
+  describe("POST /api/admin/users", () => {
     it("Should return a 400 error if an invalid role_id is passed", async () => {
       const response = await request(app)
-        .post("/api/users")
+        .post("/api/admin/users")
         .set("Cookie", global.accessToken)
         .send({
           username: "VagoDevTesting",
@@ -58,7 +58,7 @@ export const createUserTest = () => {
 
     it("Should return a 400 error if an invalid status_id is passed", async () => {
       const response = await request(app)
-        .post("/api/users")
+        .post("/api/admin/users")
         .set("Cookie", global.accessToken)
         .send({
           username: "VagoDevTesting",
@@ -77,7 +77,7 @@ export const createUserTest = () => {
 
     it("Should return a 400 error if username is not unique", async () => {
       const response = await request(app)
-        .post("/api/users")
+        .post("/api/admin/users")
         .set("Cookie", global.accessToken)
         .send({
           username: "test",
@@ -96,7 +96,7 @@ export const createUserTest = () => {
 
     it("Should return a 400 error if email is not unique", async () => {
       const response = await request(app)
-        .post("/api/users")
+        .post("/api/admin/users")
         .set("Cookie", global.accessToken)
         .send({
           username: "VagoDevTesting",
@@ -115,7 +115,7 @@ export const createUserTest = () => {
 
     it("Should create an user successfully if everything is ok", async () => {
       const response = await request(app)
-        .post("/api/users")
+        .post("/api/admin/users")
         .set("Cookie", global.accessToken)
         .send({
           username: "VagoDevTesting",
