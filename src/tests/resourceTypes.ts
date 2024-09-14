@@ -1,5 +1,5 @@
 import app from "..";
-import { STATUS_CODE_OK } from "../constants";
+import { STATUS_CODE_BAD_REQUEST, STATUS_CODE_OK } from "../constants";
 import { RESOURCE_TYPES_SUCCESSFULLY_RETRIEVED_MESSAGE } from "../controllers/resourceTypes";
 import { ApiResponse } from "../interfaces";
 import ResourceType from "../models/ResourceType";
@@ -50,6 +50,48 @@ export const getAllResourceTypesTest = () => {
           return typeToCreate.name;
         })
       );
+    });
+  });
+};
+
+export const createResourceTypeTest = () => {
+  describe("POST /api/admin/resources/types", () => {
+    const resourceTypeToCreate = {
+      name: "test",
+    };
+
+    beforeAll(async () => {
+      await ResourceType.create(resourceTypeToCreate);
+    });
+
+    afterAll(async () => {
+      await ResourceType.destroy({ where: {} });
+    });
+
+    it("Should return an error 400 if resource_name is not passed", async () => {
+      const response = await request(app)
+        .post("/api/admin/resources/types")
+        .set("Cookie", global.accessToken)
+        .send({});
+
+      const bodyResponse: ApiResponse<any> = response.body;
+
+      expect(response.status).toBe(STATUS_CODE_BAD_REQUEST);
+      expect(bodyResponse.status_code).toBe(STATUS_CODE_BAD_REQUEST);
+    });
+
+    it("Should return an error 400 if duplicated resource_name is passed", async () => {
+      const response = await request(app)
+        .post("/api/admin/resources/types")
+        .set("Cookie", global.accessToken)
+        .send(resourceTypeToCreate);
+
+      const bodyResponse: ApiResponse<any> = response.body;
+
+      expect(response.status).toBe(STATUS_CODE_BAD_REQUEST);
+      expect(bodyResponse.status_code).toBe(STATUS_CODE_BAD_REQUEST);
+      expect(bodyResponse.message).toBe("name must be unique");
+      expect(bodyResponse.data).toEqual([]);
     });
   });
 };
