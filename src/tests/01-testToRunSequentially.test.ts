@@ -7,6 +7,7 @@ import { getAllProjectTest } from "./projects";
 import { createBlogsTest } from "./blogs";
 import { getProjectById } from "./projects";
 import { createUserTest } from "./users";
+import { getAllResourceTypesTest } from "./resourceTypes";
 
 describe("sequentially run tests", () => {
   authTests();
@@ -18,4 +19,5 @@ describe("sequentially run tests", () => {
   createBlogsTest();
   getProjectById();
   createUserTest();
+  getAllResourceTypesTest();
 });

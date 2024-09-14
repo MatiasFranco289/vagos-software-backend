@@ -14,6 +14,7 @@ import resourcesAdminRouter from "./routes/resourcesAdmin";
 import projectStatesRouter from "./routes/projectStates";
 import blogsAdminRouter from "./routes/blogsAdmin";
 import userAdminRouter from "./routes/usersAdmin";
+import resourceTypesAdminRouter from "./routes/resourceTypesAdmin";
 
 dotenv.config();
 const app = express();
@@ -45,7 +46,8 @@ apiRouter.use(validateToken([ROLENAME_ADMIN]));
 apiRouter.use("/admin/projects", projectsAdminRouter);
 apiRouter.use("/admin/projects/resources", resourcesAdminRouter);
 apiRouter.use("/admin/blogs", blogsAdminRouter);
-apiRouter.use("/users", userAdminRouter);
+apiRouter.use("/admin/users", userAdminRouter);
+apiRouter.use("/admin/resources/types", resourceTypesAdminRouter);
 
 if (process.env.NODE_ENV !== TESTING) {
   startServer();
