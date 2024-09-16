@@ -10,6 +10,7 @@ import { createUserTest } from "./users";
 import {
   createResourceTypeTest,
   getAllResourceTypesTest,
+  updatedResourceTypeTest,
 } from "./resourceTypes";
 
 describe("sequentially run tests", () => {
@@ -24,4 +25,5 @@ describe("sequentially run tests", () => {
   createUserTest();
   getAllResourceTypesTest();
   createResourceTypeTest();
+  updatedResourceTypeTest();
 });
