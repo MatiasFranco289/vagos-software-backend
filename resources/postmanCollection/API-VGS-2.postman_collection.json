@@ -294,6 +294,37 @@
 			"response": []
 		},
 		{
+			"name": "createResourceType",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/admin/resources/types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"resources",
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "createBlog",
 			"request": {
 				"method": "POST",
@@ -324,13 +355,13 @@
 			"response": []
 		},
 		{
-			"name": "createResourceType",
+			"name": "updateResourceType",
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"test\"\n}",
+					"raw": "{\n    \"name\": \"VIDEO\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -338,7 +369,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/admin/resources/types",
+					"raw": "http://localhost:5000/api/admin/resources/types/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -348,7 +379,8 @@
 						"api",
 						"admin",
 						"resources",
-						"types"
+						"types",
+						"1"
 					]
 				}
 			},
