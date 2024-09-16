@@ -5,6 +5,7 @@ import {
   INTERNAL_SERVER_ERROR_MESSAGE,
   STATUS_CODE_CREATED,
   STATUS_CODE_INTERNAL_SERVER_ERROR,
+  STATUS_CODE_NOT_FOUND,
   STATUS_CODE_OK,
 } from "../constants";
 import { handleApiError } from "../utils";
@@ -15,6 +16,10 @@ export const RESOURCE_TYPE_SUCCESSFULLY_CREATED_MESSAGE =
   "The resource type was successfully created.";
 export const DEFAULT_ERROR_MESSAGE =
   "The following error has ocurred while trying to create the resource type: ";
+export const RESOURCE_TYPE_SUCCESSFULLY_UPDATED =
+  "The resource type was successfully updated.";
+export const RESOURCE_TYPE_NOT_FOUND_MESSAGE =
+  "The resource type was not found.";
 
 export const resourceTypesController = {
   getAllResourceTypes: async (
@@ -61,6 +66,34 @@ export const resourceTypesController = {
         message: RESOURCE_TYPE_SUCCESSFULLY_CREATED_MESSAGE,
         data: [createdResource],
       };
+    } catch (err) {
+      response = handleApiError(err, DEFAULT_ERROR_MESSAGE);
+    }
+
+    return res.status(response.status_code).json(response);
+  },
+  updateResourceType: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    let response: ApiResponse<null> = {
+      status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
+      message: INTERNAL_SERVER_ERROR_MESSAGE,
+      data: [],
+    };
+
+    try {
+      const [updatedCount] = await ResourceType.update(
+        { name: name },
+        { where: { id } }
+      );
+
+      if (updatedCount) {
+        response.status_code = STATUS_CODE_OK;
+        response.message = RESOURCE_TYPE_SUCCESSFULLY_UPDATED;
+      } else {
+        response.status_code = STATUS_CODE_NOT_FOUND;
+        response.message = RESOURCE_TYPE_NOT_FOUND_MESSAGE;
+      }
     } catch (err) {
       response = handleApiError(err, DEFAULT_ERROR_MESSAGE);
     }
