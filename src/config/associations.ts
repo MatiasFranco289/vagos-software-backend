@@ -23,6 +23,7 @@ export default async function createAssociations() {
   Resource.belongsTo(ResourceType, {
     foreignKey: "type_id",
     as: "type",
+    onDelete: "RESTRICT",
   });
 
   ResourceType.hasMany(Resource, {

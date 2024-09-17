@@ -10,6 +10,9 @@ import {
   RESOURCE_TYPES_SUCCESSFULLY_RETRIEVED_MESSAGE,
 } from "../controllers/resourceTypes";
 import { ApiResponse } from "../interfaces";
+import Project from "../models/Project";
+import ProjectStatus from "../models/ProjectStatus";
+import Resource from "../models/Resource";
 import ResourceType from "../models/ResourceType";
 import request from "supertest";
 
@@ -176,6 +179,88 @@ export const updatedResourceTypeTest = () => {
       expect(response.status).toBe(STATUS_CODE_OK);
       expect(bodyResponse.status_code).toBe(STATUS_CODE_OK);
       expect(bodyResponse.message).toBe(RESOURCE_TYPE_SUCCESSFULLY_UPDATED);
+    });
+  });
+};
+
+export const deleteResourceTypeTest = () => {
+  describe("DELETE /api/admin/resources/types/:id", () => {
+    beforeAll(async () => {
+      await ResourceType.bulkCreate([
+        { id: 1, name: "test1" },
+        { id: 2, name: "test2" },
+      ]);
+
+      await ProjectStatus.create({
+        id: 1,
+        name: "test",
+      });
+
+      await Project.create({
+        id: 1,
+        title: "test",
+        description: "test",
+        thumbnailUrl: "www.test.com",
+        repositoryUrl: "www.test.com",
+        statusId: 1,
+        startDate: "2024-09-28",
+        creatorId: 1,
+      });
+
+      await Resource.create({
+        id: 1,
+        typeId: 2,
+        projectId: 1,
+        url: "www.test.com",
+      });
+    });
+
+    afterAll(async () => {
+      try {
+        await Project.destroy({ where: {} });
+        await ProjectStatus.destroy({ where: {} });
+        await Resource.destroy({ where: {} });
+        await ResourceType.destroy({ where: {} });
+
+        console.log("Todo bien bro?");
+      } catch (err) {
+        console.log("Me caigo a pedazos bro");
+        console.log(err);
+      }
+    });
+
+    it("Should return a 404 error if the given id does not correspond to any resource type", async () => {
+      const response = await request(app)
+        .delete("/api/admin/resources/types/10")
+        .set("Cookie", global.accessToken);
+      const bodyResponse: ApiResponse<any> = response.body;
+
+      expect(response.status).toBe(STATUS_CODE_NOT_FOUND);
+      expect(bodyResponse.status_code).toBe(STATUS_CODE_NOT_FOUND);
+      expect(bodyResponse.message).toBe(RESOURCE_TYPE_NOT_FOUND_MESSAGE);
+    });
+
+    it("Should return a 400 error if the resource type has a relationship", async () => {
+      const response = await request(app)
+        .delete("/api/admin/resources/types/2")
+        .set("Cookie", global.accessToken);
+
+      const bodyResponse: ApiResponse<any> = response.body;
+
+      expect(response.status).toBe(STATUS_CODE_BAD_REQUEST);
+      expect(bodyResponse.status_code).toBe(STATUS_CODE_BAD_REQUEST);
+    });
+
+    it("Should delete the resource type successfully if everything is ok", async () => {
+      const response = await request(app)
+        .delete("/api/admin/resources/types/1")
+        .set("Cookie", global.accessToken);
+
+      const bodyResponse: ApiResponse<any> = response.body;
+
+      expect(response.status).toBe(STATUS_CODE_OK);
+      expect(bodyResponse.status_code).toBe(STATUS_CODE_OK);
+      expect(await ResourceType.findByPk(1)).toBe(null);
     });
   });
 };
