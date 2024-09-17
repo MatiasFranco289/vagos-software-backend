@@ -48,8 +48,8 @@ export const createProjectTest = () =>
     afterAll(async () => {
       await Project.destroy({ where: {} });
       await ProjectStatus.destroy({ where: {} });
-      await ResourceType.destroy({ where: {} });
       await Resource.destroy({ where: {} });
+      await ResourceType.destroy({ where: {} });
       await Tag.destroy({ where: {} });
     });
 

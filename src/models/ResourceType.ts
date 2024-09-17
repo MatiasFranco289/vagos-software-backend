@@ -29,7 +29,11 @@ ResourceType.init(
       unique: true,
     },
   },
-  { sequelize, tableName: "resource_types", underscored: true }
+  {
+    sequelize,
+    tableName: "resource_types",
+    underscored: true,
+  }
 );
 
 export default ResourceType;

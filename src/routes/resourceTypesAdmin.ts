@@ -18,5 +18,9 @@ resourceTypesAdminRouter.put(
   updateResourceTypeValidation,
   resourceTypesController.updateResourceType
 );
+resourceTypesAdminRouter.delete(
+  "/:id",
+  resourceTypesController.deleteResourceType
+);
 
 export default resourceTypesAdminRouter;

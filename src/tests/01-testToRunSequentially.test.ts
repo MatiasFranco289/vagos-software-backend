@@ -9,6 +9,7 @@ import { getProjectById } from "./projects";
 import { createUserTest } from "./users";
 import {
   createResourceTypeTest,
+  deleteResourceTypeTest,
   getAllResourceTypesTest,
   updatedResourceTypeTest,
 } from "./resourceTypes";
@@ -26,4 +27,5 @@ describe("sequentially run tests", () => {
   getAllResourceTypesTest();
   createResourceTypeTest();
   updatedResourceTypeTest();
+  deleteResourceTypeTest();
 });

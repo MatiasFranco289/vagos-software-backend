@@ -10,6 +10,7 @@ import { ApiResponse } from "./interfaces";
 import Role from "./models/Role";
 import UserStatus from "./models/UserStatus";
 import User from "./models/User";
+import { ForeignKeyConstraintError } from "sequelize";
 
 // This function receives an string and returns the same string hashed
 export const encryptPassword = async (password: string): Promise<string> => {
@@ -37,21 +38,34 @@ export function handleApiError(error: unknown, customLogMessage?: string) {
     data: [],
   };
 
-  const managedValidationErrors = ["unique violation"];
+  const managedDateValidationErrors = ["unique violation"];
+  const managedRestrictionsValidations = ["SequelizeForeignKeyConstraintError"];
 
+  // If a date validation of sequelize was violated
   if (error instanceof ValidationError) {
     const errorsList = error.errors;
 
     for (let i = 0; i < errorsList.length; i++) {
       const err = errorsList[i];
 
-      if (managedValidationErrors.includes(err.type)) {
+      if (managedDateValidationErrors.includes(err.type)) {
         response.status_code = STATUS_CODE_BAD_REQUEST;
         response.message = err.message;
         break;
       }
     }
   }
+
+  // If a restriction of sequelize is violated
+  if (error instanceof ForeignKeyConstraintError) {
+    const errName: string = error.name;
+
+    if (managedRestrictionsValidations.includes(errName)) {
+      response.status_code = STATUS_CODE_BAD_REQUEST;
+      response.message = error.message;
+    }
+  }
+
   console.error(`${customLogMessage || defaultLogMessage}`);
   console.error(error);
 

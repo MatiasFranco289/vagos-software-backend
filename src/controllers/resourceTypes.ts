@@ -20,6 +20,8 @@ export const RESOURCE_TYPE_SUCCESSFULLY_UPDATED =
   "The resource type was successfully updated.";
 export const RESOURCE_TYPE_NOT_FOUND_MESSAGE =
   "The resource type was not found.";
+export const RESOURCE_TYPE_SUCCESSFULLY_DELETED_MESSAGE =
+  "The resource type was successfully deleted.";
 
 export const resourceTypesController = {
   getAllResourceTypes: async (
@@ -72,7 +74,10 @@ export const resourceTypesController = {
 
     return res.status(response.status_code).json(response);
   },
-  updateResourceType: async (req: Request, res: Response) => {
+  updateResourceType: async (
+    req: Request,
+    res: Response<ApiResponse<null>>
+  ) => {
     const { id } = req.params;
     const { name } = req.body;
     let response: ApiResponse<null> = {
@@ -90,6 +95,37 @@ export const resourceTypesController = {
       if (updatedCount) {
         response.status_code = STATUS_CODE_OK;
         response.message = RESOURCE_TYPE_SUCCESSFULLY_UPDATED;
+      } else {
+        response.status_code = STATUS_CODE_NOT_FOUND;
+        response.message = RESOURCE_TYPE_NOT_FOUND_MESSAGE;
+      }
+    } catch (err) {
+      response = handleApiError(err, DEFAULT_ERROR_MESSAGE);
+    }
+
+    return res.status(response.status_code).json(response);
+  },
+  deleteResourceType: async (
+    req: Request,
+    res: Response<ApiResponse<null>>
+  ) => {
+    const { id } = req.params;
+    let response: ApiResponse<null> = {
+      status_code: STATUS_CODE_INTERNAL_SERVER_ERROR,
+      message: INTERNAL_SERVER_ERROR_MESSAGE,
+      data: [],
+    };
+
+    try {
+      let deletedAmount: number = await ResourceType.destroy({
+        where: {
+          id: id,
+        },
+      });
+
+      if (deletedAmount) {
+        response.status_code = STATUS_CODE_OK;
+        response.message = RESOURCE_TYPE_SUCCESSFULLY_DELETED_MESSAGE;
       } else {
         response.status_code = STATUS_CODE_NOT_FOUND;
         response.message = RESOURCE_TYPE_NOT_FOUND_MESSAGE;

@@ -385,6 +385,38 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "deleteResourceType",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"VIDEO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/admin/resources/types/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"resources",
+						"types",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
