@@ -15,6 +15,7 @@ import projectStatesRouter from "./routes/projectStates";
 import blogsAdminRouter from "./routes/blogsAdmin";
 import userAdminRouter from "./routes/usersAdmin";
 import resourceTypesAdminRouter from "./routes/resourceTypesAdmin";
+import { requestLogger } from "./middlewares/requestLoggerMiddleware";
 
 dotenv.config();
 const app = express();
@@ -27,6 +28,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+app.use(requestLogger);
 
 app.use("/api", apiRouter);
 

@@ -7,10 +7,9 @@ import {
 } from "./constants";
 import { ValidationError } from "sequelize";
 import { ApiResponse } from "./interfaces";
-import Role from "./models/Role";
-import UserStatus from "./models/UserStatus";
-import User from "./models/User";
 import { ForeignKeyConstraintError } from "sequelize";
+import { Request } from "express";
+import logger from "./config/logger";
 
 // This function receives an string and returns the same string hashed
 export const encryptPassword = async (password: string): Promise<string> => {
