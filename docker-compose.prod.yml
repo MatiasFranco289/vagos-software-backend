@@ -1,8 +1,7 @@
-version: "3.8"
-
 services:
   db:
     image: postgres:12.19-bookworm
+    restart: unless-stopped
     container_name: vagos-software-db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
